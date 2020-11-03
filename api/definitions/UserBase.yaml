@@ -1,0 +1,36 @@
+title: UserBase
+type: object
+x-examples:
+  example-1:
+    email: example@mail.com
+    firstName: Jane
+    lastName: Doe
+    username: User1
+    role: user
+properties:
+  email:
+    type: string
+    format: email
+    example: example@mail.com
+  firstName:
+    type: string
+    example: Jane
+  lastName:
+    type: string
+    example: Doe
+  username:
+    type: string
+    minLength: 3
+    example: User1
+  role:
+    type: string
+    enum:
+      - admin
+      - user
+    example: user
+    default: user
+required:
+  - email
+  - firstName
+  - lastName
+  - username

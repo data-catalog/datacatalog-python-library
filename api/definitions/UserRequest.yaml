@@ -1,0 +1,21 @@
+title: UserRequest
+description: The user model sent by the client to the server.
+allOf:
+  - $ref: ./UserBase.yaml
+  - type: object
+    properties:
+      password:
+        type: string
+        format: password
+        pattern: '^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$'
+        minLength: 6
+        description: 'Password of minimum 6 characters, which contains at least a number and a letter'
+        example: password1234
+x-examples:
+  example-1:
+    email: example@mail.com
+    firstName: Jane
+    lastName: Doe
+    username: User1
+    role: user
+    password: password1234
