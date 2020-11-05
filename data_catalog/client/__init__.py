@@ -31,10 +31,10 @@ from data_catalog.client.exceptions import ApiKeyError
 from data_catalog.client.exceptions import ApiException
 # import models into sdk package
 from data_catalog.client.models.asset_request import AssetRequest
-from data_catalog.client.models.asset_request_location import AssetRequestLocation
-from data_catalog.client.models.asset_request_location_parameters import AssetRequestLocationParameters
 from data_catalog.client.models.asset_response import AssetResponse
 from data_catalog.client.models.asset_response_all_of import AssetResponseAllOf
+from data_catalog.client.models.location import Location
+from data_catalog.client.models.parameter import Parameter
 from data_catalog.client.models.user_base import UserBase
 from data_catalog.client.models.user_login_request import UserLoginRequest
 from data_catalog.client.models.user_login_response import UserLoginResponse

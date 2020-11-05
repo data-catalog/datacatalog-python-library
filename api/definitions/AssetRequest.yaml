@@ -12,7 +12,7 @@ x-examples:
           value: 'https://example.com/iris.csv'
     tags:
       - multivariate
-    fomat: csv
+    format: csv
     size: string
     namespace: flowerproject
 properties:
@@ -25,25 +25,7 @@ properties:
     example: 'This is perhaps the best known database to be found in the pattern recognition literature. Fisher''s paper is a classic in the field and is referenced frequently to this day. (See Duda & Hart, for example.) The data set contains 3 classes of 50 instances each, where each class refers to a type of iris plant. One class is linearly separable from the other 2; the latter are NOT linearly separable from each other.'
     description: A longer description about the content of the data asset.
   location:
-    type: object
-    properties:
-      type:
-        type: string
-        description: The location type.
-        example: url
-      parameters:
-        type: array
-        description: An array of parameters specific to the location type.
-        items:
-          type: object
-          description: Parameter in the form of key-value pair.
-          properties:
-            key:
-              type: string
-              description: The key of the parameter.
-            value:
-              type: string
-              description: The value of the parameter
+    $ref: ./Location.yaml
   tags:
     type: array
     uniqueItems: true
@@ -51,7 +33,7 @@ properties:
     items:
       type: string
       example: multivariate
-  fomat:
+  format:
     type: string
     example: csv
     enum:

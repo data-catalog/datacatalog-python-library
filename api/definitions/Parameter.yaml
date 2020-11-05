@@ -1,0 +1,10 @@
+title: Parameter
+type: object
+description: Parameter in the form of key-value pair.
+properties:
+  key:
+    type: string
+    description: The key of the parameter.
+  value:
+    type: string
+    description: The value of the parameter

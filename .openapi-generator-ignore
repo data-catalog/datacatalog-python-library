@@ -1,5 +1,4 @@
 test/**
-docs/**
 .openapi-generator/**
 .gitignore
 .gitlab-ci.yml

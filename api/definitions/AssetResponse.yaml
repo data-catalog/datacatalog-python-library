@@ -16,3 +16,4 @@ allOf:
         description: Date of the last update.
   - $ref: ./AssetRequest.yaml
 description: The model of a data asset which is sent from the server to the client.
+x-examples: {}

@@ -36,9 +36,9 @@ class AssetRequest(object):
     openapi_types = {
         'name': 'str',
         'description': 'str',
-        'location': 'AssetRequestLocation',
+        'location': 'Location',
         'tags': 'list[str]',
-        'fomat': 'str',
+        'format': 'str',
         'size': 'str',
         'namespace': 'str'
     }
@@ -48,12 +48,12 @@ class AssetRequest(object):
         'description': 'description',
         'location': 'location',
         'tags': 'tags',
-        'fomat': 'fomat',
+        'format': 'format',
         'size': 'size',
         'namespace': 'namespace'
     }
 
-    def __init__(self, name=None, description=None, location=None, tags=None, fomat=None, size=None, namespace=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(self, name=None, description=None, location=None, tags=None, format=None, size=None, namespace=None, local_vars_configuration=None):  # noqa: E501
         """AssetRequest - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
@@ -63,7 +63,7 @@ class AssetRequest(object):
         self._description = None
         self._location = None
         self._tags = None
-        self._fomat = None
+        self._format = None
         self._size = None
         self._namespace = None
         self.discriminator = None
@@ -76,8 +76,8 @@ class AssetRequest(object):
             self.location = location
         if tags is not None:
             self.tags = tags
-        if fomat is not None:
-            self.fomat = fomat
+        if format is not None:
+            self.format = format
         if size is not None:
             self.size = size
         if namespace is not None:
@@ -135,7 +135,7 @@ class AssetRequest(object):
 
 
         :return: The location of this AssetRequest.  # noqa: E501
-        :rtype: AssetRequestLocation
+        :rtype: Location
         """
         return self._location
 
@@ -145,7 +145,7 @@ class AssetRequest(object):
 
 
         :param location: The location of this AssetRequest.  # noqa: E501
-        :type: AssetRequestLocation
+        :type: Location
         """
 
         self._location = location
@@ -174,33 +174,33 @@ class AssetRequest(object):
         self._tags = tags
 
     @property
-    def fomat(self):
-        """Gets the fomat of this AssetRequest.  # noqa: E501
+    def format(self):
+        """Gets the format of this AssetRequest.  # noqa: E501
 
         The file format of the asset.   # noqa: E501
 
-        :return: The fomat of this AssetRequest.  # noqa: E501
+        :return: The format of this AssetRequest.  # noqa: E501
         :rtype: str
         """
-        return self._fomat
+        return self._format
 
-    @fomat.setter
-    def fomat(self, fomat):
-        """Sets the fomat of this AssetRequest.
+    @format.setter
+    def format(self, format):
+        """Sets the format of this AssetRequest.
 
         The file format of the asset.   # noqa: E501
 
-        :param fomat: The fomat of this AssetRequest.  # noqa: E501
+        :param format: The format of this AssetRequest.  # noqa: E501
         :type: str
         """
         allowed_values = ["csv", "json"]  # noqa: E501
-        if self.local_vars_configuration.client_side_validation and fomat not in allowed_values:  # noqa: E501
+        if self.local_vars_configuration.client_side_validation and format not in allowed_values:  # noqa: E501
             raise ValueError(
-                "Invalid value for `fomat` ({0}), must be one of {1}"  # noqa: E501
-                .format(fomat, allowed_values)
+                "Invalid value for `format` ({0}), must be one of {1}"  # noqa: E501
+                .format(format, allowed_values)
             )
 
-        self._fomat = fomat
+        self._format = format
 
     @property
     def size(self):
