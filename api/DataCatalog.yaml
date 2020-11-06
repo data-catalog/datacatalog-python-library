@@ -1,0 +1,294 @@
+openapi: 3.0.0
+info:
+  title: Data Catalog
+  version: '1.0'
+  description: Data Catalog API.
+  contact:
+    name: Tumó Szilárd Zsolt
+    email: szilard.tumo@stud.ubbcluj.ro
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /assets:
+    get:
+      summary: Your GET endpoint
+      tags:
+        - Asset
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./definitions/AssetResponse.yaml
+              examples:
+                example-1:
+                  value:
+                    - id: '0'
+                      createdAt: '2019-08-24T14:15:22Z'
+                      updatedAt: '2019-08-24T14:15:22Z'
+                      name: Iris Dataset
+                      description: 'This is perhaps the best known database to be found in the pattern recognition literature. Fisher''s paper is a classic in the field and is referenced frequently to this day. (See Duda & Hart, for example.) The data set contains 3 classes of 50 instances each, where each class refers to a type of iris plant. One class is linearly separable from the other 2; the latter are NOT linearly separable from each other.'
+                      location:
+                        type: url
+                        url: 'http://example.com'
+                      tags:
+                        - multivariate
+                      fomat: csv
+                      size: string
+                      namespace: flowerproject
+      operationId: getAssets
+      description: List all the data assets.
+      parameters:
+        - schema:
+            type: array
+            items:
+              type: string
+            uniqueItems: true
+            example:
+              - multivariate
+              - real
+          in: query
+          description: Filter by tags.
+          name: tags
+          style: form
+        - schema:
+            type: string
+            example: flowerproject
+          in: query
+          name: namespace
+          description: Filter by namespace.
+    post:
+      summary: ''
+      operationId: createAsset
+      responses:
+        '201':
+          description: Created
+        '422':
+          description: Bad Request
+      description: Create a data asset.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./definitions/AssetRequest.yaml
+            examples:
+              example-1:
+                value:
+                  name: Iris Dataset
+                  description: 'This is perhaps the best known database to be found in the pattern recognition literature. Fisher''s paper is a classic in the field and is referenced frequently to this day. (See Duda & Hart, for example.) The data set contains 3 classes of 50 instances each, where each class refers to a type of iris plant. One class is linearly separable from the other 2; the latter are NOT linearly separable from each other.'
+                  location:
+                    type: url
+                    url: 'http://example.com'
+                  tags:
+                    - multivariate
+                  fomat: csv
+                  size: string
+                  namespace: flowerproject
+        description: The data asset to be created.
+      tags:
+        - Asset
+    parameters: []
+  '/assets/{assetId}':
+    parameters:
+      - schema:
+          type: string
+        name: assetId
+        in: path
+        description: |
+          The unique identifier of the asset.
+        required: true
+    get:
+      summary: Your GET endpoint
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ./definitions/AssetResponse.yaml
+              examples:
+                example-1:
+                  value:
+                    id: '0'
+                    createdAt: '2019-08-24T14:15:22Z'
+                    updatedAt: '2019-08-24T14:15:22Z'
+                    name: Iris Dataset
+                    description: 'This is perhaps the best known database to be found in the pattern recognition literature. Fisher''s paper is a classic in the field and is referenced frequently to this day. (See Duda & Hart, for example.) The data set contains 3 classes of 50 instances each, where each class refers to a type of iris plant. One class is linearly separable from the other 2; the latter are NOT linearly separable from each other.'
+                    location:
+                      type: url
+                      url: 'http://example.com'
+                    tags:
+                      - multivariate
+                    fomat: csv
+                    size: 25 MB
+                    namespace: flowerproject
+        '404':
+          description: Created
+      operationId: getAsset
+      tags:
+        - Asset
+      description: Get asset by ID.
+    delete:
+      summary: ''
+      operationId: deleteAsset
+      responses:
+        '204':
+          description: Asset was deleted successfully.
+        '404':
+          description: Asset not found.
+      description: Delete asset.
+      tags:
+        - Asset
+    patch:
+      summary: ''
+      operationId: patchAsset
+      responses:
+        '204':
+          description: OK
+        '422':
+          description: Created
+      description: Update only the given attributes of the asset. The attributes which are not specified in the body will not change.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./definitions/AssetRequest.yaml
+            examples:
+              example-1:
+                value:
+                  description: Updated description.
+        description: Specify only the attributes which you want to update.
+      tags:
+        - Asset
+  '/users/{userId}':
+    parameters:
+      - schema:
+          type: string
+        name: userId
+        in: path
+        required: true
+        description: Unique identifier for user
+    get:
+      summary: Your GET endpoint
+      tags:
+        - User
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: definitions/UserResponse.yaml
+              examples:
+                example-1:
+                  value:
+                    id: '0'
+                    email: example@mail.com
+                    firstName: Jane
+                    lastName: Doe
+                    username: User1
+        '404':
+          description: User not found
+      operationId: getUser
+      description: Get user by ID
+    delete:
+      summary: ''
+      operationId: deleteUser
+      responses:
+        '204':
+          description: User deleted
+      description: Delete a specific user
+      tags:
+        - User
+  /users:
+    get:
+      summary: Your GET endpoint
+      tags:
+        - User
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./definitions/UserResponse.yaml
+      operationId: getUsers
+      description: Get all users.
+    post:
+      summary: ''
+      operationId: createUser
+      responses:
+        '201':
+          description: New user created.
+        '422':
+          description: Unprocessable entity.
+      description: Create new user (registration).
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./definitions/UserRequest.yaml
+            examples:
+              example:
+                value:
+                  email: example@mail.com
+                  firstName: Jane
+                  lastName: Doe
+                  username: User1
+                  password: password1234
+        description: User information for registration.
+      tags:
+        - User
+  /users/login:
+    post:
+      summary: ''
+      operationId: login
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ./definitions/UserLoginResponse.yaml
+              examples:
+                example:
+                  value:
+                    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0ODUxNDA5ODQsImlhdCI6MTQ4NTEzNzM4NCwiaXNzIjoiYWNtZS5jb20iLCJzdWIiOiIyOWFjMGMxOC0wYjRhLTQyY2YtODJmYy0wM2Q1NzAzMThhMWQiLCJhcHBsaWNhdGlvbklkIjoiNzkxMDM3MzQtOTdhYi00ZDFhLWFmMzctZTAwNmQwNWQyOTUyIiwic
+                    user:
+                      id: string
+                      email: example@mail.com
+                      firstName: Jane
+                      lastName: Doe
+                      username: User1
+                      role: user
+        '401':
+          description: Authentication failed. The username or password is not correct.
+      description: Log user into the system.
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./definitions/UserLoginRequest.yaml
+            examples:
+              example-1:
+                value:
+                  username: username1
+                  password: password123
+      tags:
+        - User
+components:
+  securitySchemes:
+    JWT:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Authentication is made by the JWT token sent in the Authorizationheader of the request.
+tags:
+  - name: Asset
+  - name: User

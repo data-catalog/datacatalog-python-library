@@ -1,0 +1,23 @@
+allOf:
+  - type: object
+    properties:
+      id:
+        format: int64
+        type: string
+    required:
+      - id
+  - $ref: ./UserBase.yaml
+x-examples:
+  example-1:
+    id: string
+    email: example@mail.com
+    firstName: Jane
+    lastName: Doe
+    username: User1
+    role: user
+example-1:
+  id: 0
+  email: example@mail.com
+  firstName: Andrea
+  lastName: string
+description: Model sent by the server to the client

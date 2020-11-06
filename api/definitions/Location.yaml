@@ -1,0 +1,10 @@
+title: Location
+type: object
+properties:
+  type:
+    type: string
+    description: The location type.
+    example: url
+  parameters:
+    $ref: ./Parameter.yaml
+description: The location where the asset data can be found.
