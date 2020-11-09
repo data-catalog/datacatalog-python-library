@@ -1,3 +1,2 @@
 generateSourceCodeOnly: true,
-supportingFiles: false,
-packageName: 'data_catalog.client'
+supportingFiles: false

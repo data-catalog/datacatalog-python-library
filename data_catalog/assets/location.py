@@ -1,4 +1,4 @@
-from data_catalog.client.models.location import Location as ClientLocation
+from data_catalog.client.asset.models.location import Location as ClientLocation
 
 
 class Location (ClientLocation):

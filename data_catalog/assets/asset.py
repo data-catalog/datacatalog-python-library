@@ -1,7 +1,7 @@
 import pandas as pd
 
 from data_catalog.assets import Location
-from data_catalog.client import AssetResponse
+from data_catalog.client.asset import AssetResponse
 
 
 class Asset(AssetResponse):
@@ -24,16 +24,19 @@ class Asset(AssetResponse):
         if self.location is None:
             raise ValueError('Asset location is not defined')
 
+        # check location type
         if self.location.type != 'url':
             raise NotImplementedError
 
         return self._get_data_from_url()
 
     def _get_data_from_url(self):
+        # get url parameter from asset location
         url = self.location.get_parameter('url')
         if url is None:
             raise ValueError('Location has no url parameter')
 
+        # check data format
         try:
             if self.format == 'csv':
                 data_frame = pd.read_csv(url)

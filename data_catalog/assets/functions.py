@@ -1,8 +1,8 @@
 from typing import List
 
 from data_catalog.assets import Asset
-from data_catalog.client import ApiClient
-from data_catalog.client.api import AssetApi
+from data_catalog.client.asset import ApiClient
+from data_catalog.client.asset.api import AssetApi
 
 
 def list_assets(api_client: ApiClient) -> List[Asset]:

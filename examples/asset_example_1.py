@@ -1,4 +1,4 @@
-from data_catalog.client import Configuration, ApiClient, Location, Parameter
+from data_catalog.client.asset import Configuration, ApiClient, Location, Parameter
 import data_catalog.assets as assets
 
 
