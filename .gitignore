@@ -1,2 +1,5 @@
 venv/
 .idea/
+__pycache__/
+docs/
+test-output.xml

@@ -1,0 +1,6 @@
+[submodule "api/user"]
+	path = api/user
+	url = https://github.com/katacseke/data-catalog-user-api.git
+[submodule "api/asset"]
+	path = api/asset
+	url = https://github.com/katacseke/data-catalog-asset-api.git
