@@ -1,7 +1,5 @@
-from data_catalog.assets import Asset, Location
+from data_catalog.assets import Asset, Location, AssetService
 from data_catalog.client.asset import Parameter
-from data_catalog.client.asset import ApiClient
-import data_catalog.assets as assets
 
 import pytest
 
@@ -40,30 +38,30 @@ def asset_list():
 
 def test_get_asset(mocker, asset_list):
     mocker.patch(
-        'data_catalog.assets.functions.AssetApi.get_asset',
+        'data_catalog.assets.asset_service.AssetApi.get_asset',
         return_value=asset_list[0]
     )
 
-    with ApiClient() as api_client:
-        assert assets.get_asset(api_client, '0') == asset_list[0]
+    with AssetService() as asset_service:
+        assert asset_service.get_asset('0') == asset_list[0]
 
 
 @pytest.mark.skip(reason="the api endpoint's behaviour is undefined")
 def test_get_asset_id_not_found(mocker):
     mocker.patch(
-        'data_catalog.assets.functions.AssetApi.get_asset',
+        'data_catalog.assets.asset_service.AssetApi.get_asset',
         return_value=None
     )
 
-    with ApiClient() as api_client:
-        assert assets.get_asset(api_client, '0') is None
+    with AssetService() as asset_service:
+        assert asset_service.get_asset('0') is None
 
 
 def test_list_assets(mocker, asset_list):
     mocker.patch(
-        'data_catalog.assets.functions.AssetApi.get_assets',
+        'data_catalog.assets.asset_service.AssetApi.get_assets',
         return_value=asset_list
     )
 
-    with ApiClient() as api_client:
-        assert assets.list_assets(api_client) == asset_list
+    with AssetService() as asset_service:
+        assert asset_service.list_assets() == asset_list
