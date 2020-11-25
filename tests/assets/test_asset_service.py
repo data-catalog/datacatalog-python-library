@@ -1,3 +1,5 @@
+import pandas as pd
+
 from data_catalog.assets import Asset, Location, AssetService
 from data_catalog.client.asset import Parameter
 
@@ -65,3 +67,29 @@ def test_list_assets(mocker, asset_list):
 
     with AssetService() as asset_service:
         assert asset_service.list_assets() == asset_list
+
+
+def test_list_assets_dict(mocker, asset_list):
+    mocker.patch(
+        'data_catalog.assets.asset_service.AssetApi.get_assets',
+        return_value=asset_list
+    )
+
+    with AssetService() as asset_service:
+        assets = asset_service.list_assets(output_format='dict')
+
+        assert type(assets) is dict
+        assert assets['222'].format == 'json'
+
+
+def test_list_assets_dataframe(mocker, asset_list):
+    mocker.patch(
+        'data_catalog.assets.asset_service.AssetApi.get_assets',
+        return_value=asset_list
+    )
+
+    with AssetService() as asset_service:
+        assets = asset_service.list_assets(output_format='dataframe')
+
+        assert type(assets) is pd.DataFrame
+        assert assets.at['222', 'format'] == 'json'
