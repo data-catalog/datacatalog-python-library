@@ -35,7 +35,7 @@ class Location(object):
     """
     openapi_types = {
         'type': 'str',
-        'parameters': 'Parameter'
+        'parameters': 'list[Parameter]'
     }
 
     attribute_map = {
@@ -87,7 +87,7 @@ class Location(object):
 
 
         :return: The parameters of this Location.  # noqa: E501
-        :rtype: Parameter
+        :rtype: list[Parameter]
         """
         return self._parameters
 
@@ -97,7 +97,7 @@ class Location(object):
 
 
         :param parameters: The parameters of this Location.  # noqa: E501
-        :type: Parameter
+        :type: list[Parameter]
         """
 
         self._parameters = parameters

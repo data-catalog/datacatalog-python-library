@@ -37,6 +37,128 @@ class AssetApi(object):
             api_client = ApiClient()
         self.api_client = api_client
 
+    def add_tag(self, tag, asset_id, **kwargs):  # noqa: E501
+        """add_tag  # noqa: E501
+
+        The name of the tag to add.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+        >>> thread = api.add_tag(tag, asset_id, async_req=True)
+        >>> result = thread.get()
+
+        :param async_req bool: execute request asynchronously
+        :param str tag: The name of the tag. (required)
+        :param str asset_id: The unique identifier of the asset. (required)
+        :param _preload_content: if False, the urllib3.HTTPResponse object will
+                                 be returned without reading/decoding response
+                                 data. Default is True.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :return: None
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+        kwargs['_return_http_data_only'] = True
+        return self.add_tag_with_http_info(tag, asset_id, **kwargs)  # noqa: E501
+
+    def add_tag_with_http_info(self, tag, asset_id, **kwargs):  # noqa: E501
+        """add_tag  # noqa: E501
+
+        The name of the tag to add.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+        >>> thread = api.add_tag_with_http_info(tag, asset_id, async_req=True)
+        >>> result = thread.get()
+
+        :param async_req bool: execute request asynchronously
+        :param str tag: The name of the tag. (required)
+        :param str asset_id: The unique identifier of the asset. (required)
+        :param _return_http_data_only: response data without head status code
+                                       and headers
+        :param _preload_content: if False, the urllib3.HTTPResponse object will
+                                 be returned without reading/decoding response
+                                 data. Default is True.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :return: None
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+
+        local_var_params = locals()
+
+        all_params = [
+            'tag',
+            'asset_id'
+        ]
+        all_params.extend(
+            [
+                'async_req',
+                '_return_http_data_only',
+                '_preload_content',
+                '_request_timeout'
+            ]
+        )
+
+        for key, val in six.iteritems(local_var_params['kwargs']):
+            if key not in all_params:
+                raise ApiTypeError(
+                    "Got an unexpected keyword argument '%s'"
+                    " to method add_tag" % key
+                )
+            local_var_params[key] = val
+        del local_var_params['kwargs']
+        # verify the required parameter 'tag' is set
+        if self.api_client.client_side_validation and ('tag' not in local_var_params or  # noqa: E501
+                                                        local_var_params['tag'] is None):  # noqa: E501
+            raise ApiValueError("Missing the required parameter `tag` when calling `add_tag`")  # noqa: E501
+        # verify the required parameter 'asset_id' is set
+        if self.api_client.client_side_validation and ('asset_id' not in local_var_params or  # noqa: E501
+                                                        local_var_params['asset_id'] is None):  # noqa: E501
+            raise ApiValueError("Missing the required parameter `asset_id` when calling `add_tag`")  # noqa: E501
+
+        if self.api_client.client_side_validation and ('tag' in local_var_params and  # noqa: E501
+                                                        len(local_var_params['tag']) < 1):  # noqa: E501
+            raise ApiValueError("Invalid value for parameter `tag` when calling `add_tag`, length must be greater than or equal to `1`")  # noqa: E501
+        collection_formats = {}
+
+        path_params = {}
+        if 'tag' in local_var_params:
+            path_params['tag'] = local_var_params['tag']  # noqa: E501
+        if 'asset_id' in local_var_params:
+            path_params['assetId'] = local_var_params['asset_id']  # noqa: E501
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = []
+        local_var_files = {}
+
+        body_params = None
+        # Authentication setting
+        auth_settings = []  # noqa: E501
+
+        return self.api_client.call_api(
+            '/assets/{assetId}/tags/{tag}', 'POST',
+            path_params,
+            query_params,
+            header_params,
+            body=body_params,
+            post_params=form_params,
+            files=local_var_files,
+            response_type=None,  # noqa: E501
+            auth_settings=auth_settings,
+            async_req=local_var_params.get('async_req'),
+            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
+            _preload_content=local_var_params.get('_preload_content', True),
+            _request_timeout=local_var_params.get('_request_timeout'),
+            collection_formats=collection_formats)
+
     def create_asset(self, **kwargs):  # noqa: E501
         """create_asset  # noqa: E501
 
@@ -124,6 +246,10 @@ class AssetApi(object):
         body_params = None
         if 'asset_request' in local_var_params:
             body_params = local_var_params['asset_request']
+        # HTTP header `Accept`
+        header_params['Accept'] = self.api_client.select_header_accept(
+            ['application/json'])  # noqa: E501
+
         # HTTP header `Content-Type`
         header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
             ['application/json'])  # noqa: E501
@@ -257,6 +383,128 @@ class AssetApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
+    def delete_tag(self, tag, asset_id, **kwargs):  # noqa: E501
+        """delete_tag  # noqa: E501
+
+        Delete the specified tag from the asset.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+        >>> thread = api.delete_tag(tag, asset_id, async_req=True)
+        >>> result = thread.get()
+
+        :param async_req bool: execute request asynchronously
+        :param str tag: The name of the tag. (required)
+        :param str asset_id: The unique identifier of the asset. (required)
+        :param _preload_content: if False, the urllib3.HTTPResponse object will
+                                 be returned without reading/decoding response
+                                 data. Default is True.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :return: None
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+        kwargs['_return_http_data_only'] = True
+        return self.delete_tag_with_http_info(tag, asset_id, **kwargs)  # noqa: E501
+
+    def delete_tag_with_http_info(self, tag, asset_id, **kwargs):  # noqa: E501
+        """delete_tag  # noqa: E501
+
+        Delete the specified tag from the asset.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+        >>> thread = api.delete_tag_with_http_info(tag, asset_id, async_req=True)
+        >>> result = thread.get()
+
+        :param async_req bool: execute request asynchronously
+        :param str tag: The name of the tag. (required)
+        :param str asset_id: The unique identifier of the asset. (required)
+        :param _return_http_data_only: response data without head status code
+                                       and headers
+        :param _preload_content: if False, the urllib3.HTTPResponse object will
+                                 be returned without reading/decoding response
+                                 data. Default is True.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :return: None
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+
+        local_var_params = locals()
+
+        all_params = [
+            'tag',
+            'asset_id'
+        ]
+        all_params.extend(
+            [
+                'async_req',
+                '_return_http_data_only',
+                '_preload_content',
+                '_request_timeout'
+            ]
+        )
+
+        for key, val in six.iteritems(local_var_params['kwargs']):
+            if key not in all_params:
+                raise ApiTypeError(
+                    "Got an unexpected keyword argument '%s'"
+                    " to method delete_tag" % key
+                )
+            local_var_params[key] = val
+        del local_var_params['kwargs']
+        # verify the required parameter 'tag' is set
+        if self.api_client.client_side_validation and ('tag' not in local_var_params or  # noqa: E501
+                                                        local_var_params['tag'] is None):  # noqa: E501
+            raise ApiValueError("Missing the required parameter `tag` when calling `delete_tag`")  # noqa: E501
+        # verify the required parameter 'asset_id' is set
+        if self.api_client.client_side_validation and ('asset_id' not in local_var_params or  # noqa: E501
+                                                        local_var_params['asset_id'] is None):  # noqa: E501
+            raise ApiValueError("Missing the required parameter `asset_id` when calling `delete_tag`")  # noqa: E501
+
+        if self.api_client.client_side_validation and ('tag' in local_var_params and  # noqa: E501
+                                                        len(local_var_params['tag']) < 1):  # noqa: E501
+            raise ApiValueError("Invalid value for parameter `tag` when calling `delete_tag`, length must be greater than or equal to `1`")  # noqa: E501
+        collection_formats = {}
+
+        path_params = {}
+        if 'tag' in local_var_params:
+            path_params['tag'] = local_var_params['tag']  # noqa: E501
+        if 'asset_id' in local_var_params:
+            path_params['assetId'] = local_var_params['asset_id']  # noqa: E501
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = []
+        local_var_files = {}
+
+        body_params = None
+        # Authentication setting
+        auth_settings = []  # noqa: E501
+
+        return self.api_client.call_api(
+            '/assets/{assetId}/tags/{tag}', 'DELETE',
+            path_params,
+            query_params,
+            header_params,
+            body=body_params,
+            post_params=form_params,
+            files=local_var_files,
+            response_type=None,  # noqa: E501
+            auth_settings=auth_settings,
+            async_req=local_var_params.get('async_req'),
+            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
+            _preload_content=local_var_params.get('_preload_content', True),
+            _request_timeout=local_var_params.get('_request_timeout'),
+            collection_formats=collection_formats)
+
     def get_asset(self, asset_id, **kwargs):  # noqa: E501
         """Your GET endpoint  # noqa: E501
 
@@ -374,7 +622,7 @@ class AssetApi(object):
     def get_assets(self, **kwargs):  # noqa: E501
         """Your GET endpoint  # noqa: E501
 
-        List all the data assets.  # noqa: E501
+        List all the data assets. `tags` and `namespace` query params are deprecated, please use the `/assets/search` endpoint instead.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
         >>> thread = api.get_assets(async_req=True)
@@ -400,7 +648,7 @@ class AssetApi(object):
     def get_assets_with_http_info(self, **kwargs):  # noqa: E501
         """Your GET endpoint  # noqa: E501
 
-        List all the data assets.  # noqa: E501
+        List all the data assets. `tags` and `namespace` query params are deprecated, please use the `/assets/search` endpoint instead.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
         >>> thread = api.get_assets_with_http_info(async_req=True)
@@ -583,6 +831,10 @@ class AssetApi(object):
         body_params = None
         if 'asset_request' in local_var_params:
             body_params = local_var_params['asset_request']
+        # HTTP header `Accept`
+        header_params['Accept'] = self.api_client.select_header_accept(
+            ['application/json'])  # noqa: E501
+
         # HTTP header `Content-Type`
         header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
             ['application/json'])  # noqa: E501
@@ -599,6 +851,131 @@ class AssetApi(object):
             post_params=form_params,
             files=local_var_files,
             response_type=None,  # noqa: E501
+            auth_settings=auth_settings,
+            async_req=local_var_params.get('async_req'),
+            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
+            _preload_content=local_var_params.get('_preload_content', True),
+            _request_timeout=local_var_params.get('_request_timeout'),
+            collection_formats=collection_formats)
+
+    def search_assets(self, keyword, **kwargs):  # noqa: E501
+        """Your GET endpoint  # noqa: E501
+
+        List the assets which match the given keyword and optional query parameters.   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+        >>> thread = api.search_assets(keyword, async_req=True)
+        >>> result = thread.get()
+
+        :param async_req bool: execute request asynchronously
+        :param str keyword: The keyword to search by. It searches in the name of the asset. (required)
+        :param list[str] tags: Filter by tags.
+        :param str namespace: Filter by namespace.
+        :param _preload_content: if False, the urllib3.HTTPResponse object will
+                                 be returned without reading/decoding response
+                                 data. Default is True.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :return: list[AssetResponse]
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+        kwargs['_return_http_data_only'] = True
+        return self.search_assets_with_http_info(keyword, **kwargs)  # noqa: E501
+
+    def search_assets_with_http_info(self, keyword, **kwargs):  # noqa: E501
+        """Your GET endpoint  # noqa: E501
+
+        List the assets which match the given keyword and optional query parameters.   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+        >>> thread = api.search_assets_with_http_info(keyword, async_req=True)
+        >>> result = thread.get()
+
+        :param async_req bool: execute request asynchronously
+        :param str keyword: The keyword to search by. It searches in the name of the asset. (required)
+        :param list[str] tags: Filter by tags.
+        :param str namespace: Filter by namespace.
+        :param _return_http_data_only: response data without head status code
+                                       and headers
+        :param _preload_content: if False, the urllib3.HTTPResponse object will
+                                 be returned without reading/decoding response
+                                 data. Default is True.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :return: tuple(list[AssetResponse], status_code(int), headers(HTTPHeaderDict))
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+
+        local_var_params = locals()
+
+        all_params = [
+            'keyword',
+            'tags',
+            'namespace'
+        ]
+        all_params.extend(
+            [
+                'async_req',
+                '_return_http_data_only',
+                '_preload_content',
+                '_request_timeout'
+            ]
+        )
+
+        for key, val in six.iteritems(local_var_params['kwargs']):
+            if key not in all_params:
+                raise ApiTypeError(
+                    "Got an unexpected keyword argument '%s'"
+                    " to method search_assets" % key
+                )
+            local_var_params[key] = val
+        del local_var_params['kwargs']
+        # verify the required parameter 'keyword' is set
+        if self.api_client.client_side_validation and ('keyword' not in local_var_params or  # noqa: E501
+                                                        local_var_params['keyword'] is None):  # noqa: E501
+            raise ApiValueError("Missing the required parameter `keyword` when calling `search_assets`")  # noqa: E501
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'keyword' in local_var_params:
+            path_params['keyword'] = local_var_params['keyword']  # noqa: E501
+
+        query_params = []
+        if 'tags' in local_var_params and local_var_params['tags'] is not None:  # noqa: E501
+            query_params.append(('tags', local_var_params['tags']))  # noqa: E501
+            collection_formats['tags'] = 'multi'  # noqa: E501
+        if 'namespace' in local_var_params and local_var_params['namespace'] is not None:  # noqa: E501
+            query_params.append(('namespace', local_var_params['namespace']))  # noqa: E501
+
+        header_params = {}
+
+        form_params = []
+        local_var_files = {}
+
+        body_params = None
+        # HTTP header `Accept`
+        header_params['Accept'] = self.api_client.select_header_accept(
+            ['application/json'])  # noqa: E501
+
+        # Authentication setting
+        auth_settings = []  # noqa: E501
+
+        return self.api_client.call_api(
+            '/assets/search/{keyword}', 'GET',
+            path_params,
+            query_params,
+            header_params,
+            body=body_params,
+            post_params=form_params,
+            files=local_var_files,
+            response_type='list[AssetResponse]',  # noqa: E501
             auth_settings=auth_settings,
             async_req=local_var_params.get('async_req'),
             _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
