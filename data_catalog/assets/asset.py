@@ -43,7 +43,8 @@ class Asset(AssetResponse):
         """
         Converts an AssetResponse to a Response
         :param AssetResponse asset_response: Asset client generated with OpenAPI
-        :return: Asset asset
+        :return: asset
+        :rtype: Asset
         """
         asset_response.__class__ = Asset
         return asset_response
@@ -51,7 +52,9 @@ class Asset(AssetResponse):
     def get_data(self) -> Union[pd.DataFrame, ContainerClient]:
         """
         Obtains data from its location and returns it in a format specific to that location
-        :return: Union[pd.DataFrame, ContainerClient]
+        :return: if location type is 'url', then Pandas Data Frame,
+                 if it  is 'azureblob', then ContainerClient
+        :rtype: Union[pd.DataFrame, ContainerClient]
         """
 
         if self.location is None:
@@ -68,7 +71,8 @@ class Asset(AssetResponse):
     def _get_data_from_url(self) -> pd.DataFrame:
         """
         Obtains data when the location type is url
-        :return: pd.DataFrame: Pandas DataFrame
+        :return: Pandas DataFrame
+        :rtype: pd.DataFrame
         """
         # get url parameter from asset location
         url = self.location.get_parameter('url')
@@ -91,7 +95,8 @@ class Asset(AssetResponse):
     def _get_data_container(self) -> ContainerClient:
         """
         Obtains data when the location type is azureblob (data from Azure Blob Storage)
-        :return: pd.DataFrame: ContainerClient
+        :return: container
+        :rtype: ContainerClient
         """
 
         account_url = self.location.get_parameter('accountUrl')
