@@ -56,7 +56,7 @@ class Asset(AssetResponse):
         return data_frame
 
     def _get_data_container(self) -> ContainerClient:
-        account_url = self.location.get_parameter('account_url')
+        account_url = self.location.get_parameter('accountUrl')
         container_name = self.location.get_parameter('containerName')
         credential = self.location.get_parameter('sasToken')
         expiry_time = datetime\
@@ -65,7 +65,7 @@ class Asset(AssetResponse):
         if None in [account_url, container_name, credential]:
             raise ValueError('Parameters missing to create the container.')
 
-        if expiry_time > datetime.now():
+        if expiry_time < datetime.now():
             raise ValueError('SAS token expired!')
 
         return ContainerClient(account_url=account_url,
