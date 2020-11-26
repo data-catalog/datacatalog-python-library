@@ -42,6 +42,12 @@ def no_location_asset():
     return Asset('222', format='csv')
 
 
+@pytest.fixture
+def blob_asset():
+    return Asset('222', format='csv', location=Location('azureblob', parameters=[
+        Parameter('', 'random')]))
+
+
 def test_from_response(asset_response):
     asset = Asset.from_response(asset_response)
     assert type(asset) == Asset

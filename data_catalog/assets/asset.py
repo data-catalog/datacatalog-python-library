@@ -1,4 +1,8 @@
+from typing import Union
+
 import pandas as pd
+from datetime import datetime
+from azure.storage.blob import ContainerClient
 
 from data_catalog.assets import Location
 from data_catalog.client.asset import AssetResponse
@@ -20,17 +24,19 @@ class Asset(AssetResponse):
         asset_response.__class__ = Asset
         return asset_response
 
-    def get_data(self) -> pd.DataFrame:
+    def get_data(self) -> Union[pd.DataFrame, ContainerClient]:
         if self.location is None:
             raise ValueError('Asset location is not defined')
 
         # check location type
-        if self.location.type != 'url':
+        if self.location.type == 'url':
+            return self._get_data_from_url()
+        elif self.location.type == 'azureblob':
+            return self._get_data_container()
+        else:
             raise NotImplementedError
 
-        return self._get_data_from_url()
-
-    def _get_data_from_url(self):
+    def _get_data_from_url(self) -> pd.DataFrame:
         # get url parameter from asset location
         url = self.location.get_parameter('url')
         if url is None:
@@ -48,3 +54,20 @@ class Asset(AssetResponse):
             raise ValueError('Could not parse the data from the url')
 
         return data_frame
+
+    def _get_data_container(self) -> ContainerClient:
+        account_url = self.location.get_parameter('account_url')
+        container_name = self.location.get_parameter('containerName')
+        credential = self.location.get_parameter('sasToken')
+        expiry_time = datetime\
+            .strptime(self.location.get_parameter('expiryTime'), '%Y-%m-%dT%H:%M:%SZ')
+
+        if None in [account_url, container_name, credential]:
+            raise ValueError('Parameters missing to create the container.')
+
+        if expiry_time > datetime.now():
+            raise ValueError('SAS token expired!')
+
+        return ContainerClient(account_url=account_url,
+                               container_name=container_name,
+                               credential=credential)
