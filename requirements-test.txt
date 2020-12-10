@@ -6,3 +6,4 @@ pytest-azurepipelines
 pytest-cov
 pytest-mock
 wheel
+freezegun

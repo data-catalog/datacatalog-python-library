@@ -1,3 +1,6 @@
+import pandas as pd
+from freezegun import freeze_time
+
 from data_catalog.assets import Asset, Location
 from data_catalog.client.asset import AssetResponse, Location as ClientLocation, Parameter
 
@@ -26,20 +29,14 @@ def json_asset():
 
 
 @pytest.fixture
-def invalid_asset():
-    return Asset('222', format='csv', location=Location('invalid', parameters=[
-        Parameter('url', 'random')]))
-
-
-@pytest.fixture
-def no_url_location_asset():
-    return Asset('222', format='csv', location=Location('url', parameters=[
-        Parameter('invalid', 'random')]))
-
-
-@pytest.fixture
-def no_location_asset():
-    return Asset('222', format='csv')
+def blob_asset():
+    return Asset('222', format='csv', location=Location('azureblob', parameters=[
+        Parameter('accountUrl', 'https://datacatalogblob.blob.core.windows.net'),
+        Parameter('containerName', 'container'),
+        Parameter('sasToken', 'sas'),
+        Parameter('containerName', 'container'),
+        Parameter('expiryTime', '2020-11-17T17:10:50Z')
+    ]))
 
 
 def test_from_response(asset_response):
@@ -66,9 +63,34 @@ def test_get_data_from_url_json(mocker, json_asset):
     assert json_asset._get_data_from_url() == 'dataframe'
 
 
-def test_get_data_from_url_no_url(no_url_location_asset):
+def test_get_data_from_url_no_url():
+    asset = Asset('222', format='csv', location=Location('url', parameters=[
+        Parameter('invalid', 'random')]))
+
     with pytest.raises(ValueError):
-        no_url_location_asset.get_data()
+        asset.get_data()
+
+
+def test_get_data_from_container_lacking_params():
+    asset = Asset('222', format='container', location=Location('azureblob', parameters=[
+        Parameter('accountUrl', 'https://datacatalogblob.blob.core.windows.net'),
+        Parameter('containerName', 'container'),
+        Parameter('expiryTime', '2020-11-17T17:10:50Z')
+    ]))
+
+    with pytest.raises(ValueError):
+        asset.get_data()
+
+
+@freeze_time("2020-11-18")
+def test_get_data_from_container_when_expired(blob_asset):
+    with pytest.raises(ValueError):
+        blob_asset.get_data()
+
+
+@freeze_time("2020-11-16")
+def test_get_data_from_container_successful(blob_asset):
+    assert type(blob_asset.get_data()) is pd.DataFrame
 
 
 def test_get_data(mocker, json_asset):
@@ -80,11 +102,16 @@ def test_get_data(mocker, json_asset):
     assert json_asset.get_data() == 'dataframe'
 
 
-def test_get_data_invalid(invalid_asset):
+def test_get_data_invalid():
+    asset = Asset('222', format='csv', location=Location('invalid', parameters=[
+        Parameter('url', 'random')]))
+
     with pytest.raises(NotImplementedError):
-        invalid_asset.get_data()
+        asset.get_data()
 
 
-def test_get_data_no_location(no_location_asset):
+def test_get_data_no_location():
+    asset = Asset('222', format='csv')
+
     with pytest.raises(ValueError):
-        no_location_asset.get_data()
+        asset.get_data()
