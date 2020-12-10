@@ -1,4 +1,7 @@
+from csv import Sniffer
+from io import StringIO, BytesIO
 from typing import Union
+from urllib.request import urlopen
 
 import pandas as pd
 from datetime import datetime
@@ -64,7 +67,7 @@ class Asset(AssetResponse):
         if self.location.type == 'url':
             return self._get_data_from_url()
         elif self.location.type == 'azureblob':
-            return self._get_data_container()
+            return self._get_data_from_container()
         else:
             raise NotImplementedError
 
@@ -74,42 +77,84 @@ class Asset(AssetResponse):
         :return: Pandas DataFrame
         :rtype: pd.DataFrame
         """
-        # get url parameter from asset location
         url = self.location.get_parameter('url')
         if url is None:
             raise ValueError('Location has no url parameter')
 
-        # check data format
         try:
             if self.format == 'csv':
-                data_frame = pd.read_csv(url)
+                with urlopen(url) as f:
+                    stream = BytesIO(f.read())
+
+                stream.seek(0)
+                delimiter = Sniffer().sniff(stream.read().decode()).delimiter
+
+                stream.seek(0)
+                data_frame = pd.read_csv(stream, sep=delimiter)
             elif self.format == 'json':
                 data_frame = pd.read_json(url)
             else:
                 raise NotImplementedError
         except pd.errors.ParserError:
-            raise ValueError('Could not parse the data from the url')
+            raise ValueError('Could not parse data from url')
 
         return data_frame
 
-    def _get_data_container(self) -> ContainerClient:
+    def _get_data_from_container(self) -> pd.DataFrame:
         """
         Obtains data when the location type is azureblob (data from Azure Blob Storage)
-        :return: container
-        :rtype: ContainerClient
+        :return: pandas dataframe
+        :rtype: pd.DataFrame
+        """
+        container = self._get_container()
+        blob_list = container.list_blobs()
+        data_frames = []
+        try:
+            if self.format == 'csv':
+                for blob in blob_list:
+                    stream = BytesIO()
+                    container.download_blob(blob).readinto(stream)
+
+                    stream.seek(0)
+                    delimiter = Sniffer().sniff(stream.read().decode()).delimiter
+
+                    stream.seek(0)
+                    data_frames.append(pd.read_csv(stream, sep=delimiter))
+            elif self.format == 'json':
+                for blob in blob_list:
+                    stream = BytesIO()
+                    container.download_blob(blob).readinto(stream)
+
+                    stream.seek(0)
+                    data_frames.append(pd.read_json(stream))
+            else:
+                raise NotImplementedError
+        except pd.errors.ParserError:
+            raise ValueError('Could not parse the data from the blob container')
+
+        return pd.concat(data_frames, ignore_index=True)
+
+    def _get_container(self) -> ContainerClient:
         """
 
+        :return:
+        """
         account_url = self.location.get_parameter('accountUrl')
         container_name = self.location.get_parameter('containerName')
-        credential = self.location.get_parameter('sasToken')
-        expiry_time = datetime\
-            .strptime(self.location.get_parameter('expiryTime'), '%Y-%m-%dT%H:%M:%SZ')
+        credential = None
+
+        if self.location.get_parameter('sasToken') is not None:
+            expiry_time = datetime\
+                .strptime(self.location.get_parameter('expiryTime'), '%Y-%m-%dT%H:%M:%SZ')
+
+            if expiry_time >= datetime.now():
+                credential = self.location.get_parameter('sasToken')
+
+        if credential is None:
+            credential = self.location.get_parameter('accountKey')
 
         if None in [account_url, container_name, credential]:
             raise ValueError('Parameters missing to create the container.')
-
-        if expiry_time < datetime.now():
-            raise ValueError('SAS token expired!')
 
         return ContainerClient(account_url=account_url,
                                container_name=container_name,

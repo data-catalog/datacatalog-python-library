@@ -1,4 +1,4 @@
-from azure.storage.blob import ContainerClient
+import pandas as pd
 from freezegun import freeze_time
 
 from data_catalog.assets import Asset, Location
@@ -30,7 +30,7 @@ def json_asset():
 
 @pytest.fixture
 def blob_asset():
-    return Asset('222', format='container', location=Location('azureblob', parameters=[
+    return Asset('222', format='csv', location=Location('azureblob', parameters=[
         Parameter('accountUrl', 'https://datacatalogblob.blob.core.windows.net'),
         Parameter('containerName', 'container'),
         Parameter('sasToken', 'sas'),
@@ -71,7 +71,7 @@ def test_get_data_from_url_no_url():
         asset.get_data()
 
 
-def test_get_data_container_lacking_params():
+def test_get_data_from_container_lacking_params():
     asset = Asset('222', format='container', location=Location('azureblob', parameters=[
         Parameter('accountUrl', 'https://datacatalogblob.blob.core.windows.net'),
         Parameter('containerName', 'container'),
@@ -83,14 +83,14 @@ def test_get_data_container_lacking_params():
 
 
 @freeze_time("2020-11-18")
-def test_get_data_container_when_expired(blob_asset):
+def test_get_data_from_container_when_expired(blob_asset):
     with pytest.raises(ValueError):
         blob_asset.get_data()
 
 
 @freeze_time("2020-11-16")
-def test_get_data_container_successful(blob_asset):
-    assert type(blob_asset.get_data()) is ContainerClient
+def test_get_data_from_container_successful(blob_asset):
+    assert type(blob_asset.get_data()) is pd.DataFrame
 
 
 def test_get_data(mocker, json_asset):
