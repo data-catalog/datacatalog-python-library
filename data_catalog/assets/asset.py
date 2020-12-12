@@ -7,8 +7,8 @@ import pandas as pd
 from datetime import datetime
 from azure.storage.blob import ContainerClient
 
-from data_catalog.assets import Location
-from data_catalog.assets.version import Version
+import data_catalog
+from data_catalog.assets.location import Location
 from data_catalog.assets.version_service import VersionService
 from data_catalog.client.asset import AssetResponse
 
@@ -19,7 +19,7 @@ class Asset(AssetResponse):
     It provides methods to obtain data from an Asset
     """
 
-    version_service:VersionService
+    version_service: VersionService
 
     def __init__(self, id=None, created_at=None, updated_at=None, name=None, description=None, location=None, tags=None,
                  format=None, size=None, namespace=None, local_vars_configuration=None):
@@ -59,10 +59,11 @@ class Asset(AssetResponse):
         return asset_response
 
     # TODO: get data from a certain version
-    def get_data(self, version: str = None) -> pd.DataFrame:
+    def get_data(self, version_name: str = None) -> pd.DataFrame:
         """
-        Obtains data from its location and returns it in Pandas Data Frame
-        :param str version: the name of the version to download. If none, the latest version will be downloaded.
+        Obtains data from its location and returns it in Pandas Data Frame.
+        Version is only supported when the location type is azureblob.
+        :param str version_name: the name of the version to download. If none, the latest version will be downloaded.
         :return: if location type is 'url', then Pandas Data Frame,
                  if it  is 'azureblob', then ContainerClient
         :rtype: Union[pd.DataFrame, ContainerClient]
@@ -75,7 +76,7 @@ class Asset(AssetResponse):
         if self.location.type == 'url':
             return self._get_data_from_url()
         elif self.location.type == 'azureblob':
-            return self._get_data_from_container()
+            return self._get_data_from_container(version_name=version_name)
         else:
             raise NotImplementedError
 
@@ -108,14 +109,23 @@ class Asset(AssetResponse):
 
         return data_frame
 
-    def _get_data_from_container(self) -> pd.DataFrame:
+    def _get_data_from_container(self, version_name: str = None) -> pd.DataFrame:
         """
         Obtains data when the location type is azureblob (data from Azure Blob Storage)
         :return: pandas dataframe
         :rtype: pd.DataFrame
         """
         container = self._get_container()
-        blob_list = container.list_blobs()
+        if version_name is None:
+            blob_list = container.list_blobs()
+        else:
+            import data_catalog.assets.version
+            version = self.get_version(version=version_name)
+            blob_list = []
+
+            for content in version.contents:
+                content.name
+
         data_frames = []
         try:
             if self.format == 'csv':
@@ -169,8 +179,19 @@ class Asset(AssetResponse):
                                credential=credential)
 
     # TODO: get version by name, after the model function for it is generated from OpenApi
-    def get_version(self, version: str) -> Version:
+    def get_version(self, version: str) -> data_catalog.assets.version.Version:
         pass
 
-    def list_versions(self, output_format: str = 'list') -> Union[List[Version], Dict[str, Version], pd.DataFrame]:
+    def list_versions(self, output_format: str = 'list') -> Union[
+        List[data_catalog.assets.version.Version], Dict[str, data_catalog.assets.version.Version], pd.DataFrame]:
+        """
+        Lists all versions of an asset by calling the function with the same name from VersionService.
+        :param output_format: The format in which the data will be listed.
+        :return: All versions available.
+                 If the output_format is 'list': returns a list of versions.
+                 If the output_format is 'dict': returns a mapping from id to version as a dictionary.
+                 If the output_format is 'dataframe': returns a pandas DataFrame, where each row represents a version,
+                                                      the indexes are the ids, and the columns represent the attributes
+                                                      of the version.
+        """
         return self.version_service.list_versions(asset_id=self.id, output_format=output_format)
