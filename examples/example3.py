@@ -16,5 +16,8 @@ blob_asset = asset.Asset('222', format='csv', location=asset.Location('azureblob
         Parameter('expiryTime', '2020-12-20T12:36:00Z')
     ]))
 
-blob = container.get_blob_client('other.csv')
+blob = container.get_blob_client('nested/more nested/more nested user.csv')
+print(blob.get_blob_properties())
 print(blob)
+for item in container.list_blobs():
+    print(item)

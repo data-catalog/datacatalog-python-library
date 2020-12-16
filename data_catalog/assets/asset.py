@@ -5,12 +5,14 @@ from urllib.request import urlopen
 
 import pandas as pd
 from datetime import datetime
+
+from azure.core.exceptions import ResourceNotFoundError
 from azure.storage.blob import ContainerClient
 
-import data_catalog
-from data_catalog.assets.location import Location
-from data_catalog.assets.version_service import VersionService
 from data_catalog.client.asset import AssetResponse
+from data_catalog.assets.version import Version
+from data_catalog.assets.version_service import VersionService
+from data_catalog.assets import Location
 
 
 class Asset(AssetResponse):
@@ -119,12 +121,18 @@ class Asset(AssetResponse):
         if version_name is None:
             blob_list = container.list_blobs()
         else:
-            import data_catalog.assets.version
             version = self.get_version(version=version_name)
             blob_list = []
 
             for content in version.contents:
-                content.name
+                try:
+                    blob = container.get_blob_client(content.name)
+                    if blob.get_blob_properties().last_modified > content.last_modified:
+                        raise FileNotFoundError
+                except (ResourceNotFoundError, FileNotFoundError):
+                    raise FileNotFoundError('The blob %s was not found, or it was modified.' % content.name)
+
+                blob_list.append(blob)
 
         data_frames = []
         try:
@@ -179,11 +187,10 @@ class Asset(AssetResponse):
                                credential=credential)
 
     # TODO: get version by name, after the model function for it is generated from OpenApi
-    def get_version(self, version: str) -> data_catalog.assets.version.Version:
+    def get_version(self, version: str) -> Version:
         pass
 
-    def list_versions(self, output_format: str = 'list') -> Union[
-        List[data_catalog.assets.version.Version], Dict[str, data_catalog.assets.version.Version], pd.DataFrame]:
+    def list_versions(self, output_format: str = 'list') -> Union[List[Version], Dict[str, Version], pd.DataFrame]:
         """
         Lists all versions of an asset by calling the function with the same name from VersionService.
         :param output_format: The format in which the data will be listed.

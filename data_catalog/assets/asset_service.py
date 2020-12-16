@@ -3,7 +3,7 @@ from typing import List, Union, Dict
 import pandas as pd
 
 from data_catalog import configloader
-from data_catalog.assets.asset import Asset
+from data_catalog.assets import Asset
 from data_catalog.client.asset import ApiClient
 from data_catalog.client.asset.api import AssetApi
 
