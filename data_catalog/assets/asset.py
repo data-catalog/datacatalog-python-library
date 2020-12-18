@@ -186,9 +186,14 @@ class Asset(AssetResponse):
                                container_name=container_name,
                                credential=credential)
 
-    # TODO: get version by name, after the model function for it is generated from OpenApi
     def get_version(self, version: str) -> Version:
-        pass
+        """
+        Get version details of an asset by its name.
+        :param str version: the name of the version
+        :return: the requested version details
+        :rtype: Version
+        """
+        return self.version_service.get_version(asset_id=self.id, name=version)
 
     def list_versions(self, output_format: str = 'list') -> Union[List[Version], Dict[str, Version], pd.DataFrame]:
         """
