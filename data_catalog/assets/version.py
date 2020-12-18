@@ -19,7 +19,7 @@ class Version(VersionResponse):
         :param local_vars_configuration:
         """
 
-        super().__init__(id=id, created_at=created_at, name=name, asset_id=asset_id,
+        super().__init__(created_at=created_at, name=name, asset_id=asset_id,
                          contents=contents, local_vars_configuration=local_vars_configuration)
 
     @staticmethod
@@ -30,6 +30,6 @@ class Version(VersionResponse):
         :return: version
         :rtype: Version
         """
-        return Version(id=version_response.id, created_at=version_response.created_at, name=version_response.name,
+        return Version(created_at=version_response.created_at, name=version_response.name,
                        asset_id=version_response.asset_id, contents=version_response.contents,
                        local_vars_configuration=version_response.local_vars_configuration)
