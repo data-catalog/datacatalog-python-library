@@ -34,7 +34,6 @@ class VersionResponse(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'id': 'str',
         'name': 'str',
         'asset_id': 'str',
         'contents': 'list[ContentResponse]',
@@ -42,62 +41,34 @@ class VersionResponse(object):
     }
 
     attribute_map = {
-        'id': 'id',
         'name': 'name',
         'asset_id': 'assetId',
         'contents': 'contents',
         'created_at': 'createdAt'
     }
 
-    def __init__(self, id=None, name=None, asset_id=None, contents=None, created_at=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(self, name=None, asset_id=None, contents=None, created_at=None, local_vars_configuration=None):  # noqa: E501
         """VersionResponse - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
         self.local_vars_configuration = local_vars_configuration
 
-        self._id = None
         self._name = None
         self._asset_id = None
         self._contents = None
         self._created_at = None
         self.discriminator = None
 
-        self.id = id
         self.name = name
         self.asset_id = asset_id
         self.contents = contents
         self.created_at = created_at
 
     @property
-    def id(self):
-        """Gets the id of this VersionResponse.  # noqa: E501
-
-        Unique identifier of the version.  # noqa: E501
-
-        :return: The id of this VersionResponse.  # noqa: E501
-        :rtype: str
-        """
-        return self._id
-
-    @id.setter
-    def id(self, id):
-        """Sets the id of this VersionResponse.
-
-        Unique identifier of the version.  # noqa: E501
-
-        :param id: The id of this VersionResponse.  # noqa: E501
-        :type: str
-        """
-        if self.local_vars_configuration.client_side_validation and id is None:  # noqa: E501
-            raise ValueError("Invalid value for `id`, must not be `None`")  # noqa: E501
-
-        self._id = id
-
-    @property
     def name(self):
         """Gets the name of this VersionResponse.  # noqa: E501
 
-        The name (or tag) of the version.  # noqa: E501
+        The name (or tag) of the version. Unique for an asset.  # noqa: E501
 
         :return: The name of this VersionResponse.  # noqa: E501
         :rtype: str
@@ -108,7 +79,7 @@ class VersionResponse(object):
     def name(self, name):
         """Sets the name of this VersionResponse.
 
-        The name (or tag) of the version.  # noqa: E501
+        The name (or tag) of the version. Unique for an asset.  # noqa: E501
 
         :param name: The name of this VersionResponse.  # noqa: E501
         :type: str
