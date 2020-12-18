@@ -7,11 +7,10 @@ class Version(VersionResponse):
     It provides methods to obtain data from different versions of an Asset
     """
 
-    def __init__(self, id=None, name=None, asset_id=None, contents=None, created_at=None,
+    def __init__(self, name=None, asset_id=None, contents=None, created_at=None,
                  local_vars_configuration=None):
         """
         Constructor of Version class
-        :param id:
         :param name:
         :param asset_id:
         :param contents:
