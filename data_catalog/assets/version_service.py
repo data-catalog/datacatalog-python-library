@@ -64,3 +64,20 @@ class VersionService:
             return pd.DataFrame((version.to_dict() for version in versions)).set_index('name')
         else:
             raise NotImplementedError
+
+    def create_version(self, asset_id: str):
+        """
+        Create a version of an asset's current state
+        :param asset_id: the id of the asset that we are versioning
+        :return:
+        """
+        self.version_api.create_asset_version(asset_id=asset_id)
+
+    def delete_version(self, asset_id: str, version: str):
+        """
+        Delete a version of an asset by its name
+        :param asset_id: the id of the asset the version belongs to
+        :param version: the name of the version to delete
+        :return:
+        """
+        self.version_api.delete_asset_version(asset_id=asset_id, name=version)

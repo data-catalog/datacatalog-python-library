@@ -31,7 +31,7 @@ def version_list():
     ]
 
 
-def test_get_asset(mocker, version_list):
+def test_get_version(mocker, version_list):
     mocker.patch(
         'data_catalog.assets.version_service.VersionApi.get_asset_version',
         return_value=version_list[0]
@@ -41,7 +41,7 @@ def test_get_asset(mocker, version_list):
         assert version_service.get_version(name='version1', asset_id='222') == version_list[0]
 
 
-def test_list_assets(mocker, version_list):
+def test_list_versions(mocker, version_list):
     mocker.patch(
         'data_catalog.assets.version_service.VersionApi.get_asset_versions',
         return_value=version_list
@@ -84,3 +84,23 @@ def test_list_versions_wrong_type(mocker, version_list):
     with VersionService() as version_service:
         with pytest.raises(NotImplementedError):
             versions = version_service.list_versions(asset_id='222', output_format='invalid')
+
+
+def test_create_version(mocker):
+    mocker.patch(
+        'data_catalog.assets.version_service.VersionApi.create_asset_version',
+        return_value=None
+    )
+
+    with VersionService() as version_service:
+        assert version_service.create_version('222') is None
+
+
+def test_delete_version(mocker):
+    mocker.patch(
+        'data_catalog.assets.version_service.VersionApi.delete_asset_version',
+        return_value=None
+    )
+
+    with VersionService() as version_service:
+        assert version_service.delete_version('222', 'version') is None

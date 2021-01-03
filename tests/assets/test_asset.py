@@ -162,3 +162,21 @@ def test_get_version(mocker, version_list, blob_asset):
 
     version = blob_asset.get_version('version1')
     assert version == version_list[0]
+
+
+def test_create_version(mocker, blob_asset):
+    mocker.patch(
+        'data_catalog.assets.asset.VersionService.create_version',
+        return_value=None
+    )
+
+    assert blob_asset.create_version() is None
+
+
+def test_delete_version(mocker, blob_asset):
+    mocker.patch(
+        'data_catalog.assets.asset.VersionService.delete_version',
+        return_value=None
+    )
+
+    assert blob_asset.delete_version('version') is None

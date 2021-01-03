@@ -207,3 +207,18 @@ class Asset(AssetResponse):
                                                       of the version.
         """
         return self.version_service.list_versions(asset_id=self.id, output_format=output_format)
+
+    def create_version(self):
+        """
+        Create a new version of an asset's current state by calling the function with the same name from VersionService
+        :return:
+        """
+        self.version_service.create_version(asset_id=self.id)
+
+    def delete_version(self, version: str):
+        """
+        Delete a version of an asset by its name by calling the function with the same name form VersionService
+        :param version: the name of the version to delete
+        :return:
+        """
+        self.version_service.delete_version(asset_id=self.id, version=version)
