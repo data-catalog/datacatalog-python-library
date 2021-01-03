@@ -1,12 +1,12 @@
-import pandas as pd
+from azure.storage.blob import ContainerClient
 from freezegun import freeze_time
+
+import pytest
+import pandas as pd
 
 from data_catalog.assets import Asset, Location
 from data_catalog.assets.version import Version
 from data_catalog.client.asset import AssetResponse, Location as ClientLocation, Parameter
-
-import pytest
-
 from data_catalog.client.versioning import ContentResponse
 
 
@@ -114,10 +114,20 @@ def test_get_data_from_container_when_expired(blob_asset):
         blob_asset.get_data()
 
 
-@pytest.mark.skip()
 @freeze_time("2020-11-16")
-def test_get_data_from_container_successful(blob_asset):
-    assert type(blob_asset.get_data()) is pd.DataFrame
+def test_get_container_successful(blob_asset):
+    assert type(blob_asset._get_container()) is ContainerClient
+
+
+@freeze_time("2020-11-16")
+def test_get_data_from_container_when_empty(mocker, blob_asset):
+    mocker.patch(
+        'data_catalog.assets.asset.ContainerClient.list_blobs',
+        return_value=[]
+    )
+
+    with pytest.raises(ValueError):
+        blob_asset.get_data()
 
 
 def test_get_data(mocker, json_asset):
