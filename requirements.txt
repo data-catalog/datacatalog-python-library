@@ -4,6 +4,9 @@ six~=1.15.0
 certifi~=2020.6.20
 urllib3~=1.25.11
 python-dateutil~=2.8.1
+azure-storage-blob~=12.6.0
+PyYAML~=5.3.1
 -r requirements-test.txt
 
 pillow~=8.0.1
+configloader~=1.0.1

@@ -2,8 +2,9 @@ from typing import List, Union, Dict
 
 import pandas as pd
 
+from data_catalog import configloader
 from data_catalog.assets import Asset
-from data_catalog.client.asset import ApiClient, Configuration
+from data_catalog.client.asset import ApiClient
 from data_catalog.client.asset.api import AssetApi
 
 
@@ -13,17 +14,14 @@ class AssetService:
     This client provides operations to list and find assets.
     """
 
-    def __init__(self, configuration: Configuration = None):
+    def __init__(self):
         """
         Constructor of the Asset Service.
-
-        :param Configuration configuration: Configuration for the service, which may include user credentials
-                                            or server endpoint.
-                                            If not set, the default configuration will be used.
+        The configuration will be loaded from config.yaml.
         """
 
         # Create an instance of the API Client
-        self.api_client = ApiClient(configuration=configuration)
+        self.api_client = ApiClient(configuration=configloader.load())
 
         # Create an instance of the API class
         self.asset_api = AssetApi(self.api_client)

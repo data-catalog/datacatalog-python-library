@@ -6,6 +6,7 @@ omit =
         *tests*
         *__init__*
         data_catalog/client/*
+        venv/*
 
 [report]
 exclude_lines =

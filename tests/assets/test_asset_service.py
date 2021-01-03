@@ -93,3 +93,15 @@ def test_list_assets_dataframe(mocker, asset_list):
 
         assert type(assets) is pd.DataFrame
         assert assets.at['222', 'format'] == 'json'
+
+
+def test_list_assets_invalid_listing(mocker, asset_list):
+    mocker.patch(
+        'data_catalog.assets.asset_service.AssetApi.get_assets',
+        return_value=asset_list
+    )
+
+    with AssetService() as asset_service:
+        with pytest.raises(NotImplementedError):
+            assets = asset_service.list_assets(output_format='invalid')
+

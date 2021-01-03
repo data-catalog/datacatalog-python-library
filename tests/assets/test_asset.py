@@ -1,10 +1,13 @@
-import pandas as pd
+from azure.storage.blob import ContainerClient
 from freezegun import freeze_time
 
-from data_catalog.assets import Asset, Location
-from data_catalog.client.asset import AssetResponse, Location as ClientLocation, Parameter
-
 import pytest
+import pandas as pd
+
+from data_catalog.assets import Asset, Location
+from data_catalog.assets.version import Version
+from data_catalog.client.asset import AssetResponse, Location as ClientLocation, Parameter
+from data_catalog.client.versioning import ContentResponse
 
 
 @pytest.fixture
@@ -37,6 +40,29 @@ def blob_asset():
         Parameter('containerName', 'container'),
         Parameter('expiryTime', '2020-11-17T17:10:50Z')
     ]))
+
+
+@pytest.fixture
+def version_list():
+    return [
+        Version(
+            name='version1',
+            asset_id='222',
+            contents=[
+                ContentResponse(id='111', name='file1', last_modified='2020-11-17T17:10:50Z')
+            ],
+            created_at='2020-11-17T17:10:50Z',
+        ),
+        Version(
+            name='version2',
+            asset_id='222',
+            contents=[
+                ContentResponse(id='111', name='file1', last_modified='2020-11-17T17:10:50Z'),
+                ContentResponse(id='112', name='file1=2', last_modified='2020-11-17T17:10:50Z')
+            ],
+            created_at='2020-11-17T17:10:50Z',
+        )
+    ]
 
 
 def test_from_response(asset_response):
@@ -89,8 +115,19 @@ def test_get_data_from_container_when_expired(blob_asset):
 
 
 @freeze_time("2020-11-16")
-def test_get_data_from_container_successful(blob_asset):
-    assert type(blob_asset.get_data()) is pd.DataFrame
+def test_get_container_successful(blob_asset):
+    assert type(blob_asset._get_container()) is ContainerClient
+
+
+@freeze_time("2020-11-16")
+def test_get_data_from_container_when_empty(mocker, blob_asset):
+    mocker.patch(
+        'data_catalog.assets.asset.ContainerClient.list_blobs',
+        return_value=[]
+    )
+
+    with pytest.raises(ValueError):
+        blob_asset.get_data()
 
 
 def test_get_data(mocker, json_asset):
@@ -115,3 +152,41 @@ def test_get_data_no_location():
 
     with pytest.raises(ValueError):
         asset.get_data()
+
+
+def test_list_versions(mocker, version_list, blob_asset):
+    mocker.patch(
+        'data_catalog.assets.asset.VersionService.list_versions',
+        return_value=version_list
+    )
+
+    versions = blob_asset.list_versions()
+    assert versions == version_list
+
+
+def test_get_version(mocker, version_list, blob_asset):
+    mocker.patch(
+        'data_catalog.assets.asset.VersionService.get_version',
+        return_value=version_list[0]
+    )
+
+    version = blob_asset.get_version('version1')
+    assert version == version_list[0]
+
+
+def test_create_version(mocker, blob_asset):
+    mocker.patch(
+        'data_catalog.assets.asset.VersionService.create_version',
+        return_value=None
+    )
+
+    assert blob_asset.create_version() is None
+
+
+def test_delete_version(mocker, blob_asset):
+    mocker.patch(
+        'data_catalog.assets.asset.VersionService.delete_version',
+        return_value=None
+    )
+
+    assert blob_asset.delete_version('version') is None

@@ -160,18 +160,18 @@ class VersionApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def delete_asset_version(self, asset_id, version_id, **kwargs):  # noqa: E501
+    def delete_asset_version(self, asset_id, name, **kwargs):  # noqa: E501
         """delete_asset_version  # noqa: E501
 
         Deletes the sepcified version of the asset.  Responds with `404` if the asset or the version is not found. Details about the failure in the `message` field of the error response.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.delete_asset_version(asset_id, version_id, async_req=True)
+        >>> thread = api.delete_asset_version(asset_id, name, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str asset_id: The unique identifier of the asset. (required)
-        :param str version_id: The unique identifier of the version. (required)
+        :param str name: The name of an asset version. (required)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -184,20 +184,20 @@ class VersionApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.delete_asset_version_with_http_info(asset_id, version_id, **kwargs)  # noqa: E501
+        return self.delete_asset_version_with_http_info(asset_id, name, **kwargs)  # noqa: E501
 
-    def delete_asset_version_with_http_info(self, asset_id, version_id, **kwargs):  # noqa: E501
+    def delete_asset_version_with_http_info(self, asset_id, name, **kwargs):  # noqa: E501
         """delete_asset_version  # noqa: E501
 
         Deletes the sepcified version of the asset.  Responds with `404` if the asset or the version is not found. Details about the failure in the `message` field of the error response.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.delete_asset_version_with_http_info(asset_id, version_id, async_req=True)
+        >>> thread = api.delete_asset_version_with_http_info(asset_id, name, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str asset_id: The unique identifier of the asset. (required)
-        :param str version_id: The unique identifier of the version. (required)
+        :param str name: The name of an asset version. (required)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -216,7 +216,7 @@ class VersionApi(object):
 
         all_params = [
             'asset_id',
-            'version_id'
+            'name'
         ]
         all_params.extend(
             [
@@ -239,18 +239,18 @@ class VersionApi(object):
         if self.api_client.client_side_validation and ('asset_id' not in local_var_params or  # noqa: E501
                                                         local_var_params['asset_id'] is None):  # noqa: E501
             raise ApiValueError("Missing the required parameter `asset_id` when calling `delete_asset_version`")  # noqa: E501
-        # verify the required parameter 'version_id' is set
-        if self.api_client.client_side_validation and ('version_id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['version_id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `version_id` when calling `delete_asset_version`")  # noqa: E501
+        # verify the required parameter 'name' is set
+        if self.api_client.client_side_validation and ('name' not in local_var_params or  # noqa: E501
+                                                        local_var_params['name'] is None):  # noqa: E501
+            raise ApiValueError("Missing the required parameter `name` when calling `delete_asset_version`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
         if 'asset_id' in local_var_params:
             path_params['assetId'] = local_var_params['asset_id']  # noqa: E501
-        if 'version_id' in local_var_params:
-            path_params['versionId'] = local_var_params['version_id']  # noqa: E501
+        if 'name' in local_var_params:
+            path_params['name'] = local_var_params['name']  # noqa: E501
 
         query_params = []
 
@@ -268,7 +268,7 @@ class VersionApi(object):
         auth_settings = ['JWT']  # noqa: E501
 
         return self.api_client.call_api(
-            '/assets/{assetId}/versions/{versionId}', 'DELETE',
+            '/assets/{assetId}/versions/{name}', 'DELETE',
             path_params,
             query_params,
             header_params,
@@ -283,18 +283,18 @@ class VersionApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def get_asset_version(self, asset_id, version_id, **kwargs):  # noqa: E501
+    def get_asset_version(self, asset_id, name, **kwargs):  # noqa: E501
         """A version of an asset  # noqa: E501
 
         Returns the required version of the asset.  Responds with `404` if the asset or the version is not found. Details about the failure in the `message` field of the response object.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.get_asset_version(asset_id, version_id, async_req=True)
+        >>> thread = api.get_asset_version(asset_id, name, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str asset_id: The unique identifier of the asset. (required)
-        :param str version_id: The unique identifier of the version. (required)
+        :param str name: The name of an asset version. (required)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -307,20 +307,20 @@ class VersionApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.get_asset_version_with_http_info(asset_id, version_id, **kwargs)  # noqa: E501
+        return self.get_asset_version_with_http_info(asset_id, name, **kwargs)  # noqa: E501
 
-    def get_asset_version_with_http_info(self, asset_id, version_id, **kwargs):  # noqa: E501
+    def get_asset_version_with_http_info(self, asset_id, name, **kwargs):  # noqa: E501
         """A version of an asset  # noqa: E501
 
         Returns the required version of the asset.  Responds with `404` if the asset or the version is not found. Details about the failure in the `message` field of the response object.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.get_asset_version_with_http_info(asset_id, version_id, async_req=True)
+        >>> thread = api.get_asset_version_with_http_info(asset_id, name, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str asset_id: The unique identifier of the asset. (required)
-        :param str version_id: The unique identifier of the version. (required)
+        :param str name: The name of an asset version. (required)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -339,7 +339,7 @@ class VersionApi(object):
 
         all_params = [
             'asset_id',
-            'version_id'
+            'name'
         ]
         all_params.extend(
             [
@@ -362,18 +362,18 @@ class VersionApi(object):
         if self.api_client.client_side_validation and ('asset_id' not in local_var_params or  # noqa: E501
                                                         local_var_params['asset_id'] is None):  # noqa: E501
             raise ApiValueError("Missing the required parameter `asset_id` when calling `get_asset_version`")  # noqa: E501
-        # verify the required parameter 'version_id' is set
-        if self.api_client.client_side_validation and ('version_id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['version_id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `version_id` when calling `get_asset_version`")  # noqa: E501
+        # verify the required parameter 'name' is set
+        if self.api_client.client_side_validation and ('name' not in local_var_params or  # noqa: E501
+                                                        local_var_params['name'] is None):  # noqa: E501
+            raise ApiValueError("Missing the required parameter `name` when calling `get_asset_version`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
         if 'asset_id' in local_var_params:
             path_params['assetId'] = local_var_params['asset_id']  # noqa: E501
-        if 'version_id' in local_var_params:
-            path_params['versionId'] = local_var_params['version_id']  # noqa: E501
+        if 'name' in local_var_params:
+            path_params['name'] = local_var_params['name']  # noqa: E501
 
         query_params = []
 
@@ -391,7 +391,7 @@ class VersionApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            '/assets/{assetId}/versions/{versionId}', 'GET',
+            '/assets/{assetId}/versions/{name}', 'GET',
             path_params,
             query_params,
             header_params,
