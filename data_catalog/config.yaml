@@ -1,1 +1,7 @@
-host: https://datacatalogassethandler.azurewebsites.net
+user_service:
+  client_side_validation: false
+  host: https://datacatalogregistryuserhandletest.azurewebsites.net
+asset_service:
+  host: https://datacatalogassethandler.azurewebsites.net
+versioning_service:
+  host: https://tbd.azurewebsites.net/
