@@ -17,7 +17,7 @@ class VersionService:
         The configuration will be loaded from config.yaml.
         """
         # Create an instance of the API Client
-        self.api_client = ApiClient(configuration=configloader.load())
+        self.api_client = ApiClient(configuration=configloader.load_versioning_service_config())
 
         # Create an instance of the API class
         self.version_api = VersionApi(self.api_client)

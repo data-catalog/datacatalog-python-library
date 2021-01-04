@@ -4,8 +4,10 @@ import pandas as pd
 
 from data_catalog import configloader
 from data_catalog.assets import Asset
-from data_catalog.client.asset import ApiClient
+from data_catalog.client.asset import ApiClient as AssetApiClient
+from data_catalog.client.user import ApiClient as UserApiClient
 from data_catalog.client.asset.api import AssetApi
+from data_catalog.client.user import UserApi, UserLoginRequest, UserLoginResponse, ApiException
 
 
 class AssetService:
@@ -14,17 +16,20 @@ class AssetService:
     This client provides operations to list and find assets.
     """
 
-    def __init__(self):
+    def __init__(self, username: str = None, password: str = None):
         """
         Constructor of the Asset Service.
         The configuration will be loaded from config.yaml.
         """
 
         # Create an instance of the API Client
-        self.api_client = ApiClient(configuration=configloader.load())
-
+        self.api_client = AssetApiClient(configuration=configloader.load_asset_service_config())
         # Create an instance of the API class
         self.asset_api = AssetApi(self.api_client)
+
+        if username is not None and password is not None:
+            token: str = self._get_access_token(username, password)
+            print(token)
 
     def __enter__(self):
         return self
@@ -32,6 +37,21 @@ class AssetService:
     def __exit__(self, exc_type, exc_value, traceback):
         if self.api_client is not None:
             self.api_client.close()
+
+    def _get_access_token(self, username: str, password: str):
+        user_login_request = UserLoginRequest(
+            username, password,
+            local_vars_configuration=self.api_client.configuration
+        )
+
+        with UserApiClient(configuration=configloader.load_user_service_config()) as user_api_client:
+            user_api = UserApi(user_api_client)
+            try:
+                user_login_response: UserLoginResponse = user_api.login(user_login_request=user_login_request)
+            except ApiException:
+                raise PermissionError('Username or password is incorrect.')
+
+        return user_login_response.token
 
     def list_assets(self, namespace: str = None, tags: List[str] = None, output_format: str = 'list') \
             -> Union[List[Asset], Dict[str, Asset], pd.DataFrame]:
