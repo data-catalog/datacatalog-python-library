@@ -24,7 +24,7 @@ class Asset(AssetResponse):
     version_service: VersionService
 
     def __init__(self, id=None, created_at=None, updated_at=None, name=None, description=None, location=None, tags=None,
-                 format=None, size=None, namespace=None, local_vars_configuration=None):
+                 format=None, namespace=None, local_vars_configuration=None):
         """
         Constructor of Asset
         :param str id:
@@ -41,7 +41,7 @@ class Asset(AssetResponse):
         """
 
         super().__init__(id=id, created_at=created_at, updated_at=updated_at, name=name, description=description,
-                         location=location, tags=tags, format=format, size=size, namespace=namespace,
+                         location=location, tags=tags, format=format, namespace=namespace,
                          local_vars_configuration=local_vars_configuration)
 
         if self.location is not None:

@@ -1,3 +1,4 @@
+from pprint import pprint
 from typing import List, Union, Dict
 
 import pandas as pd
@@ -29,7 +30,9 @@ class AssetService:
 
         if username is not None and password is not None:
             token: str = self._get_access_token(username, password)
-            print(token)
+
+            self.api_client.configuration.access_token = token
+            configloader.set_access_token(token)
 
     def __enter__(self):
         return self

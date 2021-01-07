@@ -37,8 +37,118 @@ class AssetApi(object):
             api_client = ApiClient()
         self.api_client = api_client
 
+    def add_favorite_asset(self, asset_id, **kwargs):  # noqa: E501
+        """Add asset to favorites  # noqa: E501
+
+        Adds the asset to the currently logged in user's favorites. Responds with `404` if the asset is not found.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+        >>> thread = api.add_favorite_asset(asset_id, async_req=True)
+        >>> result = thread.get()
+
+        :param async_req bool: execute request asynchronously
+        :param str asset_id: The id of the asset to add to the favorites. (required)
+        :param _preload_content: if False, the urllib3.HTTPResponse object will
+                                 be returned without reading/decoding response
+                                 data. Default is True.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :return: None
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+        kwargs['_return_http_data_only'] = True
+        return self.add_favorite_asset_with_http_info(asset_id, **kwargs)  # noqa: E501
+
+    def add_favorite_asset_with_http_info(self, asset_id, **kwargs):  # noqa: E501
+        """Add asset to favorites  # noqa: E501
+
+        Adds the asset to the currently logged in user's favorites. Responds with `404` if the asset is not found.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+        >>> thread = api.add_favorite_asset_with_http_info(asset_id, async_req=True)
+        >>> result = thread.get()
+
+        :param async_req bool: execute request asynchronously
+        :param str asset_id: The id of the asset to add to the favorites. (required)
+        :param _return_http_data_only: response data without head status code
+                                       and headers
+        :param _preload_content: if False, the urllib3.HTTPResponse object will
+                                 be returned without reading/decoding response
+                                 data. Default is True.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :return: None
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+
+        local_var_params = locals()
+
+        all_params = [
+            'asset_id'
+        ]
+        all_params.extend(
+            [
+                'async_req',
+                '_return_http_data_only',
+                '_preload_content',
+                '_request_timeout'
+            ]
+        )
+
+        for key, val in six.iteritems(local_var_params['kwargs']):
+            if key not in all_params:
+                raise ApiTypeError(
+                    "Got an unexpected keyword argument '%s'"
+                    " to method add_favorite_asset" % key
+                )
+            local_var_params[key] = val
+        del local_var_params['kwargs']
+        # verify the required parameter 'asset_id' is set
+        if self.api_client.client_side_validation and ('asset_id' not in local_var_params or  # noqa: E501
+                                                        local_var_params['asset_id'] is None):  # noqa: E501
+            raise ApiValueError("Missing the required parameter `asset_id` when calling `add_favorite_asset`")  # noqa: E501
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'asset_id' in local_var_params:
+            path_params['assetId'] = local_var_params['asset_id']  # noqa: E501
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = []
+        local_var_files = {}
+
+        body_params = None
+        # Authentication setting
+        auth_settings = ['JWT']  # noqa: E501
+
+        return self.api_client.call_api(
+            '/assets/favorites/{assetId}', 'POST',
+            path_params,
+            query_params,
+            header_params,
+            body=body_params,
+            post_params=form_params,
+            files=local_var_files,
+            response_type=None,  # noqa: E501
+            auth_settings=auth_settings,
+            async_req=local_var_params.get('async_req'),
+            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
+            _preload_content=local_var_params.get('_preload_content', True),
+            _request_timeout=local_var_params.get('_request_timeout'),
+            collection_formats=collection_formats)
+
     def add_tag(self, tag, asset_id, **kwargs):  # noqa: E501
-        """add_tag  # noqa: E501
+        """Add tag to asset  # noqa: E501
 
         The name of the tag to add.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -64,7 +174,7 @@ class AssetApi(object):
         return self.add_tag_with_http_info(tag, asset_id, **kwargs)  # noqa: E501
 
     def add_tag_with_http_info(self, tag, asset_id, **kwargs):  # noqa: E501
-        """add_tag  # noqa: E501
+        """Add tag to asset  # noqa: E501
 
         The name of the tag to add.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -141,7 +251,7 @@ class AssetApi(object):
 
         body_params = None
         # Authentication setting
-        auth_settings = []  # noqa: E501
+        auth_settings = ['JWT']  # noqa: E501
 
         return self.api_client.call_api(
             '/assets/{assetId}/tags/{tag}', 'POST',
@@ -160,7 +270,7 @@ class AssetApi(object):
             collection_formats=collection_formats)
 
     def create_asset(self, **kwargs):  # noqa: E501
-        """create_asset  # noqa: E501
+        """Create an asset  # noqa: E501
 
         Create a data asset.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -169,7 +279,7 @@ class AssetApi(object):
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param AssetRequest asset_request: The data asset to be created.
+        :param AssetCreationRequest asset_creation_request: The data asset to be created.
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -185,7 +295,7 @@ class AssetApi(object):
         return self.create_asset_with_http_info(**kwargs)  # noqa: E501
 
     def create_asset_with_http_info(self, **kwargs):  # noqa: E501
-        """create_asset  # noqa: E501
+        """Create an asset  # noqa: E501
 
         Create a data asset.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -194,7 +304,7 @@ class AssetApi(object):
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param AssetRequest asset_request: The data asset to be created.
+        :param AssetCreationRequest asset_creation_request: The data asset to be created.
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -212,7 +322,7 @@ class AssetApi(object):
         local_var_params = locals()
 
         all_params = [
-            'asset_request'
+            'asset_creation_request'
         ]
         all_params.extend(
             [
@@ -244,8 +354,8 @@ class AssetApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'asset_request' in local_var_params:
-            body_params = local_var_params['asset_request']
+        if 'asset_creation_request' in local_var_params:
+            body_params = local_var_params['asset_creation_request']
         # HTTP header `Accept`
         header_params['Accept'] = self.api_client.select_header_accept(
             ['application/json'])  # noqa: E501
@@ -255,7 +365,7 @@ class AssetApi(object):
             ['application/json'])  # noqa: E501
 
         # Authentication setting
-        auth_settings = []  # noqa: E501
+        auth_settings = ['JWT']  # noqa: E501
 
         return self.api_client.call_api(
             '/assets', 'POST',
@@ -274,7 +384,7 @@ class AssetApi(object):
             collection_formats=collection_formats)
 
     def delete_asset(self, asset_id, **kwargs):  # noqa: E501
-        """delete_asset  # noqa: E501
+        """Delete asset by ID  # noqa: E501
 
         Delete asset.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -299,7 +409,7 @@ class AssetApi(object):
         return self.delete_asset_with_http_info(asset_id, **kwargs)  # noqa: E501
 
     def delete_asset_with_http_info(self, asset_id, **kwargs):  # noqa: E501
-        """delete_asset  # noqa: E501
+        """Delete asset by ID  # noqa: E501
 
         Delete asset.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -365,7 +475,7 @@ class AssetApi(object):
 
         body_params = None
         # Authentication setting
-        auth_settings = []  # noqa: E501
+        auth_settings = ['JWT']  # noqa: E501
 
         return self.api_client.call_api(
             '/assets/{assetId}', 'DELETE',
@@ -384,7 +494,7 @@ class AssetApi(object):
             collection_formats=collection_formats)
 
     def delete_tag(self, tag, asset_id, **kwargs):  # noqa: E501
-        """delete_tag  # noqa: E501
+        """Delete tag from asset  # noqa: E501
 
         Delete the specified tag from the asset.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -410,7 +520,7 @@ class AssetApi(object):
         return self.delete_tag_with_http_info(tag, asset_id, **kwargs)  # noqa: E501
 
     def delete_tag_with_http_info(self, tag, asset_id, **kwargs):  # noqa: E501
-        """delete_tag  # noqa: E501
+        """Delete tag from asset  # noqa: E501
 
         Delete the specified tag from the asset.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -487,7 +597,7 @@ class AssetApi(object):
 
         body_params = None
         # Authentication setting
-        auth_settings = []  # noqa: E501
+        auth_settings = ['JWT']  # noqa: E501
 
         return self.api_client.call_api(
             '/assets/{assetId}/tags/{tag}', 'DELETE',
@@ -506,7 +616,7 @@ class AssetApi(object):
             collection_formats=collection_formats)
 
     def get_asset(self, asset_id, **kwargs):  # noqa: E501
-        """Your GET endpoint  # noqa: E501
+        """Get asset by ID  # noqa: E501
 
         Get asset by ID.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -531,7 +641,7 @@ class AssetApi(object):
         return self.get_asset_with_http_info(asset_id, **kwargs)  # noqa: E501
 
     def get_asset_with_http_info(self, asset_id, **kwargs):  # noqa: E501
-        """Your GET endpoint  # noqa: E501
+        """Get asset by ID  # noqa: E501
 
         Get asset by ID.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -620,7 +730,7 @@ class AssetApi(object):
             collection_formats=collection_formats)
 
     def get_assets(self, **kwargs):  # noqa: E501
-        """Your GET endpoint  # noqa: E501
+        """Get all assets  # noqa: E501
 
         List all the data assets. `tags` and `namespace` query params are deprecated, please use the `/assets/search` endpoint instead.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -646,7 +756,7 @@ class AssetApi(object):
         return self.get_assets_with_http_info(**kwargs)  # noqa: E501
 
     def get_assets_with_http_info(self, **kwargs):  # noqa: E501
-        """Your GET endpoint  # noqa: E501
+        """Get all assets  # noqa: E501
 
         List all the data assets. `tags` and `namespace` query params are deprecated, please use the `/assets/search` endpoint instead.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -735,8 +845,113 @@ class AssetApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
+    def get_favorite_assets(self, **kwargs):  # noqa: E501
+        """List favorite assets  # noqa: E501
+
+        Lists the favorite assets of the currently logged in user.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+        >>> thread = api.get_favorite_assets(async_req=True)
+        >>> result = thread.get()
+
+        :param async_req bool: execute request asynchronously
+        :param _preload_content: if False, the urllib3.HTTPResponse object will
+                                 be returned without reading/decoding response
+                                 data. Default is True.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :return: list[AssetResponse]
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+        kwargs['_return_http_data_only'] = True
+        return self.get_favorite_assets_with_http_info(**kwargs)  # noqa: E501
+
+    def get_favorite_assets_with_http_info(self, **kwargs):  # noqa: E501
+        """List favorite assets  # noqa: E501
+
+        Lists the favorite assets of the currently logged in user.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+        >>> thread = api.get_favorite_assets_with_http_info(async_req=True)
+        >>> result = thread.get()
+
+        :param async_req bool: execute request asynchronously
+        :param _return_http_data_only: response data without head status code
+                                       and headers
+        :param _preload_content: if False, the urllib3.HTTPResponse object will
+                                 be returned without reading/decoding response
+                                 data. Default is True.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :return: tuple(list[AssetResponse], status_code(int), headers(HTTPHeaderDict))
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+
+        local_var_params = locals()
+
+        all_params = [
+        ]
+        all_params.extend(
+            [
+                'async_req',
+                '_return_http_data_only',
+                '_preload_content',
+                '_request_timeout'
+            ]
+        )
+
+        for key, val in six.iteritems(local_var_params['kwargs']):
+            if key not in all_params:
+                raise ApiTypeError(
+                    "Got an unexpected keyword argument '%s'"
+                    " to method get_favorite_assets" % key
+                )
+            local_var_params[key] = val
+        del local_var_params['kwargs']
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = []
+        local_var_files = {}
+
+        body_params = None
+        # HTTP header `Accept`
+        header_params['Accept'] = self.api_client.select_header_accept(
+            ['application/json'])  # noqa: E501
+
+        # Authentication setting
+        auth_settings = ['JWT']  # noqa: E501
+
+        return self.api_client.call_api(
+            '/assets/favorites', 'GET',
+            path_params,
+            query_params,
+            header_params,
+            body=body_params,
+            post_params=form_params,
+            files=local_var_files,
+            response_type='list[AssetResponse]',  # noqa: E501
+            auth_settings=auth_settings,
+            async_req=local_var_params.get('async_req'),
+            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
+            _preload_content=local_var_params.get('_preload_content', True),
+            _request_timeout=local_var_params.get('_request_timeout'),
+            collection_formats=collection_formats)
+
     def patch_asset(self, asset_id, **kwargs):  # noqa: E501
-        """patch_asset  # noqa: E501
+        """Update asset by ID  # noqa: E501
 
         Update only the given attributes of the asset. The attributes which are not specified in the body will not change.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -746,7 +961,7 @@ class AssetApi(object):
 
         :param async_req bool: execute request asynchronously
         :param str asset_id: The unique identifier of the asset.  (required)
-        :param AssetRequest asset_request: Specify only the attributes which you want to update.
+        :param AssetUpdateRequest asset_update_request: Specify only the attributes which you want to update.
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -762,7 +977,7 @@ class AssetApi(object):
         return self.patch_asset_with_http_info(asset_id, **kwargs)  # noqa: E501
 
     def patch_asset_with_http_info(self, asset_id, **kwargs):  # noqa: E501
-        """patch_asset  # noqa: E501
+        """Update asset by ID  # noqa: E501
 
         Update only the given attributes of the asset. The attributes which are not specified in the body will not change.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -772,7 +987,7 @@ class AssetApi(object):
 
         :param async_req bool: execute request asynchronously
         :param str asset_id: The unique identifier of the asset.  (required)
-        :param AssetRequest asset_request: Specify only the attributes which you want to update.
+        :param AssetUpdateRequest asset_update_request: Specify only the attributes which you want to update.
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -791,7 +1006,7 @@ class AssetApi(object):
 
         all_params = [
             'asset_id',
-            'asset_request'
+            'asset_update_request'
         ]
         all_params.extend(
             [
@@ -829,8 +1044,8 @@ class AssetApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'asset_request' in local_var_params:
-            body_params = local_var_params['asset_request']
+        if 'asset_update_request' in local_var_params:
+            body_params = local_var_params['asset_update_request']
         # HTTP header `Accept`
         header_params['Accept'] = self.api_client.select_header_accept(
             ['application/json'])  # noqa: E501
@@ -840,7 +1055,7 @@ class AssetApi(object):
             ['application/json'])  # noqa: E501
 
         # Authentication setting
-        auth_settings = []  # noqa: E501
+        auth_settings = ['JWT']  # noqa: E501
 
         return self.api_client.call_api(
             '/assets/{assetId}', 'PATCH',
@@ -859,7 +1074,7 @@ class AssetApi(object):
             collection_formats=collection_formats)
 
     def search_assets(self, keyword, **kwargs):  # noqa: E501
-        """Your GET endpoint  # noqa: E501
+        """Search assets  # noqa: E501
 
         List the assets which match the given keyword and optional query parameters.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -871,6 +1086,7 @@ class AssetApi(object):
         :param str keyword: The keyword to search by. It searches in the name of the asset. (required)
         :param list[str] tags: Filter by tags.
         :param str namespace: Filter by namespace.
+        :param str owner: Filter by owner.
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -886,7 +1102,7 @@ class AssetApi(object):
         return self.search_assets_with_http_info(keyword, **kwargs)  # noqa: E501
 
     def search_assets_with_http_info(self, keyword, **kwargs):  # noqa: E501
-        """Your GET endpoint  # noqa: E501
+        """Search assets  # noqa: E501
 
         List the assets which match the given keyword and optional query parameters.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -898,6 +1114,7 @@ class AssetApi(object):
         :param str keyword: The keyword to search by. It searches in the name of the asset. (required)
         :param list[str] tags: Filter by tags.
         :param str namespace: Filter by namespace.
+        :param str owner: Filter by owner.
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -917,7 +1134,8 @@ class AssetApi(object):
         all_params = [
             'keyword',
             'tags',
-            'namespace'
+            'namespace',
+            'owner'
         ]
         all_params.extend(
             [
@@ -953,6 +1171,8 @@ class AssetApi(object):
             collection_formats['tags'] = 'multi'  # noqa: E501
         if 'namespace' in local_var_params and local_var_params['namespace'] is not None:  # noqa: E501
             query_params.append(('namespace', local_var_params['namespace']))  # noqa: E501
+        if 'owner' in local_var_params and local_var_params['owner'] is not None:  # noqa: E501
+            query_params.append(('owner', local_var_params['owner']))  # noqa: E501
 
         header_params = {}
 

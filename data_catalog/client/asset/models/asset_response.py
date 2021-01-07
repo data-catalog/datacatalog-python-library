@@ -37,12 +37,13 @@ class AssetResponse(object):
         'id': 'str',
         'created_at': 'datetime',
         'updated_at': 'datetime',
+        'owner_id': 'str',
         'name': 'str',
         'description': 'str',
+        'short_description': 'str',
         'location': 'Location',
         'tags': 'list[str]',
         'format': 'str',
-        'size': 'str',
         'namespace': 'str'
     }
 
@@ -50,16 +51,17 @@ class AssetResponse(object):
         'id': 'id',
         'created_at': 'createdAt',
         'updated_at': 'updatedAt',
+        'owner_id': 'ownerId',
         'name': 'name',
         'description': 'description',
+        'short_description': 'shortDescription',
         'location': 'location',
         'tags': 'tags',
         'format': 'format',
-        'size': 'size',
         'namespace': 'namespace'
     }
 
-    def __init__(self, id=None, created_at=None, updated_at=None, name=None, description=None, location=None, tags=None, format=None, size=None, namespace=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(self, id=None, created_at=None, updated_at=None, owner_id=None, name=None, description=None, short_description=None, location=None, tags=None, format=None, namespace=None, local_vars_configuration=None):  # noqa: E501
         """AssetResponse - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
@@ -68,12 +70,13 @@ class AssetResponse(object):
         self._id = None
         self._created_at = None
         self._updated_at = None
+        self._owner_id = None
         self._name = None
         self._description = None
+        self._short_description = None
         self._location = None
         self._tags = None
         self._format = None
-        self._size = None
         self._namespace = None
         self.discriminator = None
 
@@ -83,18 +86,20 @@ class AssetResponse(object):
             self.created_at = created_at
         if updated_at is not None:
             self.updated_at = updated_at
+        if owner_id is not None:
+            self.owner_id = owner_id
         if name is not None:
             self.name = name
         if description is not None:
             self.description = description
+        if short_description is not None:
+            self.short_description = short_description
         if location is not None:
             self.location = location
         if tags is not None:
             self.tags = tags
         if format is not None:
             self.format = format
-        if size is not None:
-            self.size = size
         if namespace is not None:
             self.namespace = namespace
 
@@ -168,6 +173,29 @@ class AssetResponse(object):
         self._updated_at = updated_at
 
     @property
+    def owner_id(self):
+        """Gets the owner_id of this AssetResponse.  # noqa: E501
+
+        The id of the user who owns the Asset.  # noqa: E501
+
+        :return: The owner_id of this AssetResponse.  # noqa: E501
+        :rtype: str
+        """
+        return self._owner_id
+
+    @owner_id.setter
+    def owner_id(self, owner_id):
+        """Sets the owner_id of this AssetResponse.
+
+        The id of the user who owns the Asset.  # noqa: E501
+
+        :param owner_id: The owner_id of this AssetResponse.  # noqa: E501
+        :type: str
+        """
+
+        self._owner_id = owner_id
+
+    @property
     def name(self):
         """Gets the name of this AssetResponse.  # noqa: E501
 
@@ -187,6 +215,12 @@ class AssetResponse(object):
         :param name: The name of this AssetResponse.  # noqa: E501
         :type: str
         """
+        if (self.local_vars_configuration.client_side_validation and
+                name is not None and len(name) > 120):
+            raise ValueError("Invalid value for `name`, length must be less than or equal to `120`")  # noqa: E501
+        if (self.local_vars_configuration.client_side_validation and
+                name is not None and len(name) < 3):
+            raise ValueError("Invalid value for `name`, length must be greater than or equal to `3`")  # noqa: E501
 
         self._name = name
 
@@ -210,8 +244,37 @@ class AssetResponse(object):
         :param description: The description of this AssetResponse.  # noqa: E501
         :type: str
         """
+        if (self.local_vars_configuration.client_side_validation and
+                description is not None and len(description) < 3):
+            raise ValueError("Invalid value for `description`, length must be greater than or equal to `3`")  # noqa: E501
 
         self._description = description
+
+    @property
+    def short_description(self):
+        """Gets the short_description of this AssetResponse.  # noqa: E501
+
+        Short description breifly definig an asset.  # noqa: E501
+
+        :return: The short_description of this AssetResponse.  # noqa: E501
+        :rtype: str
+        """
+        return self._short_description
+
+    @short_description.setter
+    def short_description(self, short_description):
+        """Sets the short_description of this AssetResponse.
+
+        Short description breifly definig an asset.  # noqa: E501
+
+        :param short_description: The short_description of this AssetResponse.  # noqa: E501
+        :type: str
+        """
+        if (self.local_vars_configuration.client_side_validation and
+                short_description is not None and len(short_description) > 300):
+            raise ValueError("Invalid value for `short_description`, length must be less than or equal to `300`")  # noqa: E501
+
+        self._short_description = short_description
 
     @property
     def location(self):
@@ -277,7 +340,7 @@ class AssetResponse(object):
         :param format: The format of this AssetResponse.  # noqa: E501
         :type: str
         """
-        allowed_values = ["csv", "json", "container"]  # noqa: E501
+        allowed_values = ["csv", "json"]  # noqa: E501
         if self.local_vars_configuration.client_side_validation and format not in allowed_values:  # noqa: E501
             raise ValueError(
                 "Invalid value for `format` ({0}), must be one of {1}"  # noqa: E501
@@ -285,29 +348,6 @@ class AssetResponse(object):
             )
 
         self._format = format
-
-    @property
-    def size(self):
-        """Gets the size of this AssetResponse.  # noqa: E501
-
-        The approximate size of the asset.  # noqa: E501
-
-        :return: The size of this AssetResponse.  # noqa: E501
-        :rtype: str
-        """
-        return self._size
-
-    @size.setter
-    def size(self, size):
-        """Sets the size of this AssetResponse.
-
-        The approximate size of the asset.  # noqa: E501
-
-        :param size: The size of this AssetResponse.  # noqa: E501
-        :type: str
-        """
-
-        self._size = size
 
     @property
     def namespace(self):
