@@ -53,7 +53,7 @@ class AssetCreationRequest(object):
         'namespace': 'namespace'
     }
 
-    def __init__(self, name=None, description=None, short_description=None, location=None, tags=None, format=None, namespace=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(self, name=None, description=None, short_description=None, location=None, tags=None, format=None, namespace='', local_vars_configuration=None):  # noqa: E501
         """AssetCreationRequest - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
@@ -161,9 +161,6 @@ class AssetCreationRequest(object):
         if (self.local_vars_configuration.client_side_validation and
                 short_description is not None and len(short_description) > 512):
             raise ValueError("Invalid value for `short_description`, length must be less than or equal to `512`")  # noqa: E501
-        if (self.local_vars_configuration.client_side_validation and
-                short_description is not None and len(short_description) < 1):
-            raise ValueError("Invalid value for `short_description`, length must be greater than or equal to `1`")  # noqa: E501
 
         self._short_description = short_description
 
@@ -267,9 +264,6 @@ class AssetCreationRequest(object):
         if (self.local_vars_configuration.client_side_validation and
                 namespace is not None and len(namespace) > 256):
             raise ValueError("Invalid value for `namespace`, length must be less than or equal to `256`")  # noqa: E501
-        if (self.local_vars_configuration.client_side_validation and
-                namespace is not None and len(namespace) < 1):
-            raise ValueError("Invalid value for `namespace`, length must be greater than or equal to `1`")  # noqa: E501
 
         self._namespace = namespace
 
