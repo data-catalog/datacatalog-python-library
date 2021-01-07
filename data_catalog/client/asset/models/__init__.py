@@ -15,9 +15,9 @@
 from __future__ import absolute_import
 
 # import models into model package
-from data_catalog.client.asset.models.asset_request import AssetRequest
+from data_catalog.client.asset.models.asset_creation_request import AssetCreationRequest
 from data_catalog.client.asset.models.asset_response import AssetResponse
-from data_catalog.client.asset.models.asset_response_all_of import AssetResponseAllOf
+from data_catalog.client.asset.models.asset_update_request import AssetUpdateRequest
 from data_catalog.client.asset.models.error_response import ErrorResponse
 from data_catalog.client.asset.models.location import Location
 from data_catalog.client.asset.models.parameter import Parameter

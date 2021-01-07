@@ -53,8 +53,7 @@ class Location(object):
         self._parameters = None
         self.discriminator = None
 
-        if type is not None:
-            self.type = type
+        self.type = type
         if parameters is not None:
             self.parameters = parameters
 
@@ -78,6 +77,8 @@ class Location(object):
         :param type: The type of this Location.  # noqa: E501
         :type: str
         """
+        if self.local_vars_configuration.client_side_validation and type is None:  # noqa: E501
+            raise ValueError("Invalid value for `type`, must not be `None`")  # noqa: E501
 
         self._type = type
 

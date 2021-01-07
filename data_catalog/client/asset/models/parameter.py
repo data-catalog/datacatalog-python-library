@@ -53,10 +53,8 @@ class Parameter(object):
         self._value = None
         self.discriminator = None
 
-        if key is not None:
-            self.key = key
-        if value is not None:
-            self.value = value
+        self.key = key
+        self.value = value
 
     @property
     def key(self):
@@ -78,6 +76,14 @@ class Parameter(object):
         :param key: The key of this Parameter.  # noqa: E501
         :type: str
         """
+        if self.local_vars_configuration.client_side_validation and key is None:  # noqa: E501
+            raise ValueError("Invalid value for `key`, must not be `None`")  # noqa: E501
+        if (self.local_vars_configuration.client_side_validation and
+                key is not None and len(key) > 256):
+            raise ValueError("Invalid value for `key`, length must be less than or equal to `256`")  # noqa: E501
+        if (self.local_vars_configuration.client_side_validation and
+                key is not None and len(key) < 1):
+            raise ValueError("Invalid value for `key`, length must be greater than or equal to `1`")  # noqa: E501
 
         self._key = key
 
@@ -101,6 +107,14 @@ class Parameter(object):
         :param value: The value of this Parameter.  # noqa: E501
         :type: str
         """
+        if self.local_vars_configuration.client_side_validation and value is None:  # noqa: E501
+            raise ValueError("Invalid value for `value`, must not be `None`")  # noqa: E501
+        if (self.local_vars_configuration.client_side_validation and
+                value is not None and len(value) > 256):
+            raise ValueError("Invalid value for `value`, length must be less than or equal to `256`")  # noqa: E501
+        if (self.local_vars_configuration.client_side_validation and
+                value is not None and len(value) < 1):
+            raise ValueError("Invalid value for `value`, length must be greater than or equal to `1`")  # noqa: E501
 
         self._value = value
 
