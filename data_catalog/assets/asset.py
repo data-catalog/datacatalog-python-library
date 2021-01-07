@@ -23,8 +23,8 @@ class Asset(AssetResponse):
 
     version_service: VersionService
 
-    def __init__(self, id=None, created_at=None, updated_at=None, name=None, description=None, location=None, tags=None,
-                 format=None, namespace=None, local_vars_configuration=None):
+    def __init__(self, id=None, created_at=None, updated_at=None, name=None, description=None, short_description=None,
+                 location=None, tags=None, format=None, namespace=None, local_vars_configuration=None):
         """
         Constructor of Asset
         :param str id:
@@ -32,16 +32,16 @@ class Asset(AssetResponse):
         :param str updated_at:
         :param str name:
         :param str description:
+        :param str short_description:
         :param Location location: The location where the asset data can be found
         :param list[str] tags: list of tags
         :param str format:
-        :param str size:
         :param str namespace:
         :param local_vars_configuration:
         """
 
         super().__init__(id=id, created_at=created_at, updated_at=updated_at, name=name, description=description,
-                         location=location, tags=tags, format=format, namespace=namespace,
+                         short_description=short_description, location=location, tags=tags, format=format, namespace=namespace,
                          local_vars_configuration=local_vars_configuration)
 
         if self.location is not None:
