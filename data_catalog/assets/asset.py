@@ -58,6 +58,9 @@ class Asset(AssetResponse):
         :rtype: Asset
         """
         asset_response.__class__ = Asset
+        if asset_response.location is not None:
+            asset_response.location = Location(asset_response.location.type, asset_response.location.parameters)
+
         return asset_response
 
     # TODO: get data from a certain version

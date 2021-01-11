@@ -6,3 +6,5 @@ test-output.xml
 coverage_html_report/
 .coverage
 coverage.xml
+.ipynb_checkpoints/
+*.egg-info/

@@ -711,7 +711,7 @@ class AssetApi(object):
             ['application/json'])  # noqa: E501
 
         # Authentication setting
-        auth_settings = []  # noqa: E501
+        auth_settings = ['JWT']  # noqa: E501
 
         return self.api_client.call_api(
             '/assets/{assetId}', 'GET',
@@ -827,7 +827,7 @@ class AssetApi(object):
             ['application/json'])  # noqa: E501
 
         # Authentication setting
-        auth_settings = []  # noqa: E501
+        auth_settings = ['JWT']  # noqa: E501
 
         return self.api_client.call_api(
             '/assets', 'GET',
@@ -1185,7 +1185,7 @@ class AssetApi(object):
             ['application/json'])  # noqa: E501
 
         # Authentication setting
-        auth_settings = []  # noqa: E501
+        auth_settings = ['JWT']  # noqa: E501
 
         return self.api_client.call_api(
             '/assets/search/{keyword}', 'GET',
