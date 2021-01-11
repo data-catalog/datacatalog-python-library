@@ -29,6 +29,15 @@ steps:
     pip install -r requirements.txt
   displayName: 'Install dependencies'
 
+- task: SonarCloudPrepare@1
+  displayName: 'Prepare analysis configuration'
+  inputs:
+    SonarCloud: 'SC'
+    organization: 'matezsolt'
+    scannerMode: 'CLI'
+    projectKey: 'matezsolt_data-catalog-python-library'
+    projectName: 'BlueBook Python'
+
 - script: |
     pip install pytest pytest-azurepipelines
     pytest tests
@@ -45,13 +54,19 @@ steps:
     pytest tests --doctest-modules --junitxml=junit/test-results.xml --cov=. --cov-report=xml --cov-report=html
   displayName: 'Test with pytest'
 
+- task: SonarCloudAnalyze@1
+  displayName: 'Run SonarCloud analysis'
+
+- task: SonarCloudPublish@1 
+  displayName: 'Publish results on build summary'
+
 - task: PublishTestResults@2
   condition: succeededOrFailed()
   inputs:
     testResultsFiles: '**/test-*.xml'
     testRunTitle: 'Publish test results for Python $(python.version)'
 
-- task: PublishCodeCoverageResults@1
+- task: PublishCodeCoverageResults@1 
   inputs:
     codeCoverageTool: Cobertura
     summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/coverage.xml'
