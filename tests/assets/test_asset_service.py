@@ -23,7 +23,6 @@ def asset_list():
             location=Location('url', Parameter('url', 'http://example.com')),
             tags=['multivariate'],
             format='csv',
-            size='25 MB',
             namespace='flowerproject',
         ),
         Asset(

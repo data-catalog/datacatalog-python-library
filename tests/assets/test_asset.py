@@ -98,13 +98,13 @@ def test_get_data_from_url_no_url():
 
 
 def test_get_data_from_container_lacking_params():
-    asset = Asset('222', format='container', location=Location('azureblob', parameters=[
-        Parameter('accountUrl', 'https://datacatalogblob.blob.core.windows.net'),
-        Parameter('containerName', 'container'),
-        Parameter('expiryTime', '2020-11-17T17:10:50Z')
-    ]))
-
     with pytest.raises(ValueError):
+        asset = Asset('222', format='container', location=Location('azureblob', parameters=[
+            Parameter('accountUrl', 'https://datacatalogblob.blob.core.windows.net'),
+            Parameter('containerName', 'container'),
+            Parameter('expiryTime', '2020-11-17T17:10:50Z')
+        ]))
+
         asset.get_data()
 
 
