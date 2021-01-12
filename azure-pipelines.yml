@@ -3,71 +3,72 @@
 # Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
-
 #https://github.com/Azure-Samples/azure-pipelines-python
 
 trigger:
-- master
+  - master
+  - develop
+  - release/1.0
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: "ubuntu-latest"
 strategy:
   matrix:
     Python36:
-      python.version: '3.6'
+      python.version: "3.6"
     Python37:
-      python.version: '3.7'
+      python.version: "3.7"
 
 steps:
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '$(python.version)'
-  displayName: 'Use Python $(python.version)'
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: "$(python.version)"
+    displayName: "Use Python $(python.version)"
 
-- script: |
-    python -m pip install --upgrade pip
-    pip install -r requirements.txt
-  displayName: 'Install dependencies'
+  - script: |
+      python -m pip install --upgrade pip
+      pip install -r requirements.txt
+    displayName: "Install dependencies"
 
-- task: SonarCloudPrepare@1
-  displayName: 'Prepare analysis configuration'
-  inputs:
-    SonarCloud: 'SC'
-    organization: 'matezsolt'
-    scannerMode: 'CLI'
-    projectKey: 'matezsolt_data-catalog-python-library'
-    projectName: 'BlueBook Python'
+  - task: SonarCloudPrepare@1
+    displayName: "Prepare analysis configuration"
+    inputs:
+      SonarCloud: "SC"
+      organization: "matezsolt"
+      scannerMode: "CLI"
+      projectKey: "matezsolt_data-catalog-python-library"
+      projectName: "BlueBook Python"
 
-- script: |
-    pip install pytest pytest-azurepipelines
-    pytest tests
-  displayName: 'pytest'
+  - script: |
+      pip install pytest pytest-azurepipelines
+      pytest tests
+    displayName: "pytest"
 
-- script: |
-    python -m pip install flake8
-    flake8 .
-  displayName: 'Run lint tests'
+  - script: |
+      python -m pip install flake8
+      flake8 .
+    displayName: "Run lint tests"
 
-- script: |
-    pip install pytest
-    pip install pytest-cov
-    pytest tests --doctest-modules --junitxml=junit/test-results.xml --cov=. --cov-report=xml --cov-report=html
-  displayName: 'Test with pytest'
+  - script: |
+      pip install pytest
+      pip install pytest-cov
+      pytest tests --doctest-modules --junitxml=junit/test-results.xml --cov=. --cov-report=xml --cov-report=html
+    displayName: "Test with pytest"
 
-- task: SonarCloudAnalyze@1
-  displayName: 'Run SonarCloud analysis'
+  - task: SonarCloudAnalyze@1
+    displayName: "Run SonarCloud analysis"
 
-- task: SonarCloudPublish@1 
-  displayName: 'Publish results on build summary'
+  - task: SonarCloudPublish@1
+    displayName: "Publish results on build summary"
 
-- task: PublishTestResults@2
-  condition: succeededOrFailed()
-  inputs:
-    testResultsFiles: '**/test-*.xml'
-    testRunTitle: 'Publish test results for Python $(python.version)'
+  - task: PublishTestResults@2
+    condition: succeededOrFailed()
+    inputs:
+      testResultsFiles: "**/test-*.xml"
+      testRunTitle: "Publish test results for Python $(python.version)"
 
-- task: PublishCodeCoverageResults@1 
-  inputs:
-    codeCoverageTool: Cobertura
-    summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/coverage.xml'
-    reportDirectory: '$(System.DefaultWorkingDirectory)/**/htmlcov'
+  - task: PublishCodeCoverageResults@1
+    inputs:
+      codeCoverageTool: Cobertura
+      summaryFileLocation: "$(System.DefaultWorkingDirectory)/**/coverage.xml"
+      reportDirectory: "$(System.DefaultWorkingDirectory)/**/htmlcov"
