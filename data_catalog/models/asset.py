@@ -10,9 +10,9 @@ from azure.core.exceptions import ResourceNotFoundError
 from azure.storage.blob import ContainerClient
 
 from data_catalog.client.asset import AssetResponse
-from data_catalog.assets.version import Version
-from data_catalog.assets.version_service import VersionService
-from data_catalog.assets import Location
+from data_catalog.models.version import Version
+from data_catalog.services.version_service import VersionService
+from data_catalog.models.location import Location
 
 
 class Asset(AssetResponse):
@@ -23,25 +23,29 @@ class Asset(AssetResponse):
 
     version_service: VersionService
 
-    def __init__(self, id=None, created_at=None, updated_at=None, name=None, description=None, short_description=None,
-                 location=None, tags=None, format=None, namespace=None, local_vars_configuration=None):
+    def __init__(self, id=None, created_at=None, updated_at=None, owner_id=None, name=None, description=None,
+                 short_description=None, location=None, tags=None, format=None, is_public=None, members=None,
+                 local_vars_configuration=None):
         """
         Constructor of Asset
         :param str id:
         :param str created_at:
         :param str updated_at:
+        :param str owner_id: The id of the user who owns the asset.
         :param str name:
         :param str description:
         :param str short_description:
         :param Location location: The location where the asset data can be found
         :param list[str] tags: list of tags
         :param str format:
-        :param str namespace:
+        :param bool is_public:
+        :param list[str] members: List of users that have access to the asset
         :param local_vars_configuration:
         """
 
-        super().__init__(id=id, created_at=created_at, updated_at=updated_at, name=name, description=description,
-                         short_description=short_description, location=location, tags=tags, format=format, namespace=namespace,
+        super().__init__(id=id, created_at=created_at, updated_at=updated_at, owner_id=owner_id, name=name,
+                         description=description, short_description=short_description, location=location, tags=tags,
+                         format=format, is_public=is_public, members=members,
                          local_vars_configuration=local_vars_configuration)
 
         if self.location is not None:
@@ -75,7 +79,7 @@ class Asset(AssetResponse):
         """
 
         if self.location is None:
-            raise ValueError('Asset location is not defined')
+            raise ValueError('Asset location is not defined.')
 
         # check location type
         if self.location.type == 'url':
@@ -110,7 +114,7 @@ class Asset(AssetResponse):
             else:
                 raise NotImplementedError
         except pd.errors.ParserError:
-            raise ValueError('Could not parse data from url')
+            raise ValueError('Could not parse data from url.')
 
         return data_frame
 
@@ -165,8 +169,6 @@ class Asset(AssetResponse):
 
     def _get_container(self) -> ContainerClient:
         """
-
-        :return:
         """
         account_url = self.location.get_parameter('accountUrl')
         container_name = self.location.get_parameter('containerName')

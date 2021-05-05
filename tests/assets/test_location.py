@@ -1,10 +1,10 @@
-from data_catalog.assets import Location
-from data_catalog.client.asset import Parameter
+from data_catalog.models import Location
+from data_catalog.client.asset import ParameterDto
 import pytest
 
 
 def test_get_parameters():
-    location = Location('url', [Parameter('key1', 'value1')])
+    location = Location('url', [ParameterDto('key1', 'value1')])
 
     assert location.get_parameter('key1') == 'value1'
     assert location.get_parameter('key2') is None

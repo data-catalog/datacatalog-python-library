@@ -1,8 +1,8 @@
 from typing import List, Dict, Union
 import pandas as pd
 
-from data_catalog import configloader
-from data_catalog.assets.version import Version
+from data_catalog import config_provider
+from data_catalog.models.version import Version
 from data_catalog.client.versioning import ApiClient, VersionApi
 
 
@@ -17,7 +17,7 @@ class VersionService:
         The configuration will be loaded from config.yaml.
         """
         # Create an instance of the API Client
-        self.api_client = ApiClient(configuration=configloader.load_versioning_service_config())
+        self.api_client = ApiClient(configuration=config_provider.get_versioning_service_config())
 
         # Create an instance of the API class
         self.version_api = VersionApi(self.api_client)
@@ -26,8 +26,7 @@ class VersionService:
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        if self.api_client is not None:
-            self.api_client.close()
+        self.api_client.close()
 
     def get_version(self, asset_id: str, name: str) -> Version:
         """
@@ -63,7 +62,7 @@ class VersionService:
         elif output_format == 'dataframe':
             return pd.DataFrame((version.to_dict() for version in versions)).set_index('name')
         else:
-            raise NotImplementedError
+            raise ValueError('Invalid output format specified.')
 
     def create_version(self, asset_id: str):
         """

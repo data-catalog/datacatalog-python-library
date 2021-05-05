@@ -1,7 +1,8 @@
 import pandas as pd
 
-from data_catalog.assets import Asset, Location, AssetService
-from data_catalog.client.asset import Parameter
+from data_catalog.models import Asset, Location
+from data_catalog.services import AssetService
+from data_catalog.client.asset import ParameterDto, ApiException
 
 import pytest
 
@@ -20,26 +21,25 @@ def asset_list():
                         'refers to a type of iris plant. One class is linearly separable from the other 2; the latter '
                         'are '
                         'NOT linearly separable from each other.',
-            location=Location('url', Parameter('url', 'http://example.com')),
+            location=Location('url', parameters=[ParameterDto('url', 'https://example.com')]),
             tags=['multivariate'],
             format='csv',
-            namespace='flowerproject',
         ),
         Asset(
             '222',
             format='json',
-            location=Location('url', parameters=[Parameter('url', 'https://api.exchangerate-api.com/v4/latest/USD')])
+            location=Location('url', parameters=[ParameterDto('url', 'https://api.exchangerate-api.com/v4/latest/USD')])
         ),
         Asset(
             '223',
             format='csv',
-            location=Location('url', parameters=[Parameter('invalid', 'random')]))
+            location=Location('url', parameters=[ParameterDto('invalid', 'random')]))
     ]
 
 
 def test_get_asset(mocker, asset_list):
     mocker.patch(
-        'data_catalog.assets.asset_service.AssetApi.get_asset',
+        'data_catalog.services.asset_service.AssetApi.get_asset',
         return_value=asset_list[0]
     )
 
@@ -47,20 +47,30 @@ def test_get_asset(mocker, asset_list):
         assert asset_service.get_asset('0') == asset_list[0]
 
 
-@pytest.mark.skip(reason="the api endpoint's behaviour is undefined")
 def test_get_asset_id_not_found(mocker):
     mocker.patch(
-        'data_catalog.assets.asset_service.AssetApi.get_asset',
-        return_value=None
+        'data_catalog.services.asset_service.AssetApi.get_asset',
+        side_effect=ApiException(status=404, reason='Not Found')
     )
 
     with AssetService() as asset_service:
         assert asset_service.get_asset('0') is None
 
 
+def test_get_asset_api_call_error(mocker):
+    mocker.patch(
+        'data_catalog.services.asset_service.AssetApi.get_asset',
+        side_effect=ApiException(status=500, reason='Internal Server Error')
+    )
+
+    with AssetService() as asset_service:
+        with pytest.raises(ApiException):
+            asset_service.get_asset('0')
+
+
 def test_list_assets(mocker, asset_list):
     mocker.patch(
-        'data_catalog.assets.asset_service.AssetApi.get_assets',
+        'data_catalog.services.asset_service.AssetApi.get_assets',
         return_value=asset_list
     )
 
@@ -70,7 +80,7 @@ def test_list_assets(mocker, asset_list):
 
 def test_list_assets_dict(mocker, asset_list):
     mocker.patch(
-        'data_catalog.assets.asset_service.AssetApi.get_assets',
+        'data_catalog.services.asset_service.AssetApi.get_assets',
         return_value=asset_list
     )
 
@@ -83,7 +93,7 @@ def test_list_assets_dict(mocker, asset_list):
 
 def test_list_assets_dataframe(mocker, asset_list):
     mocker.patch(
-        'data_catalog.assets.asset_service.AssetApi.get_assets',
+        'data_catalog.services.asset_service.AssetApi.get_assets',
         return_value=asset_list
     )
 
@@ -96,11 +106,10 @@ def test_list_assets_dataframe(mocker, asset_list):
 
 def test_list_assets_invalid_listing(mocker, asset_list):
     mocker.patch(
-        'data_catalog.assets.asset_service.AssetApi.get_assets',
+        'data_catalog.services.asset_service.AssetApi.get_assets',
         return_value=asset_list
     )
 
     with AssetService() as asset_service:
-        with pytest.raises(NotImplementedError):
-            assets = asset_service.list_assets(output_format='invalid')
-
+        with pytest.raises(ValueError):
+            asset_service.list_assets(output_format='invalid')

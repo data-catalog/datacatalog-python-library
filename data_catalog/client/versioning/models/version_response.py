@@ -1,9 +1,9 @@
 # coding: utf-8
 
 """
-    Data Catalog Versioning API
+    Data Catalog Versioning Service API
 
-    This API is used to communicate with the versioning service of the Data Catalog application.  # noqa: E501
+    The asset versioning service of the Data Catalog application.  Provides API endpoints to create, delete and retrieve asset versions. The access rights to an asset's version are the same as the right to the asset itself.  The versions cannot be modified, only deleted.  # noqa: E501
 
     The version of the OpenAPI document: 1.0
     Contact: szilardtumo@stud.ubbcluj.ro
@@ -68,7 +68,7 @@ class VersionResponse(object):
     def name(self):
         """Gets the name of this VersionResponse.  # noqa: E501
 
-        The name (or tag) of the version. Unique for an asset.  # noqa: E501
+        The name of the version. Unique for an asset.  # noqa: E501
 
         :return: The name of this VersionResponse.  # noqa: E501
         :rtype: str
@@ -79,7 +79,7 @@ class VersionResponse(object):
     def name(self, name):
         """Sets the name of this VersionResponse.
 
-        The name (or tag) of the version. Unique for an asset.  # noqa: E501
+        The name of the version. Unique for an asset.  # noqa: E501
 
         :param name: The name of this VersionResponse.  # noqa: E501
         :type: str
@@ -93,7 +93,7 @@ class VersionResponse(object):
     def asset_id(self):
         """Gets the asset_id of this VersionResponse.  # noqa: E501
 
-        The unique identifier of the asset having this version.  # noqa: E501
+        The ID of the asset having this version.  # noqa: E501
 
         :return: The asset_id of this VersionResponse.  # noqa: E501
         :rtype: str
@@ -104,7 +104,7 @@ class VersionResponse(object):
     def asset_id(self, asset_id):
         """Sets the asset_id of this VersionResponse.
 
-        The unique identifier of the asset having this version.  # noqa: E501
+        The ID of the asset having this version.  # noqa: E501
 
         :param asset_id: The asset_id of this VersionResponse.  # noqa: E501
         :type: str
@@ -118,7 +118,7 @@ class VersionResponse(object):
     def contents(self):
         """Gets the contents of this VersionResponse.  # noqa: E501
 
-        The list of contents which are present in this version.  # noqa: E501
+        The list of blobs which are present in this version.  # noqa: E501
 
         :return: The contents of this VersionResponse.  # noqa: E501
         :rtype: list[ContentResponse]
@@ -129,7 +129,7 @@ class VersionResponse(object):
     def contents(self, contents):
         """Sets the contents of this VersionResponse.
 
-        The list of contents which are present in this version.  # noqa: E501
+        The list of blobs which are present in this version.  # noqa: E501
 
         :param contents: The contents of this VersionResponse.  # noqa: E501
         :type: list[ContentResponse]

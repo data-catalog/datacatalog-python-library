@@ -1,9 +1,9 @@
 # coding: utf-8
 
 """
-    Data Catalog Versioning API
+    Data Catalog Versioning Service API
 
-    This API is used to communicate with the versioning service of the Data Catalog application.  # noqa: E501
+    The asset versioning service of the Data Catalog application.  Provides API endpoints to create, delete and retrieve asset versions. The access rights to an asset's version are the same as the right to the asset itself.  The versions cannot be modified, only deleted.  # noqa: E501
 
     The version of the OpenAPI document: 1.0
     Contact: szilardtumo@stud.ubbcluj.ro
@@ -52,11 +52,30 @@ class Configuration(object):
       nothing to discard.
 
     :Example:
+
+    API Key Authentication Example.
+    Given the following security scheme in the OpenAPI specification:
+      components:
+        securitySchemes:
+          cookieAuth:         # name for the security scheme
+            type: apiKey
+            in: cookie
+            name: JSESSIONID  # cookie name
+
+    You can programmatically set the cookie:
+
+conf = data_catalog.client.versioning.Configuration(
+    api_key={'cookieAuth': 'abc123'}
+    api_key_prefix={'cookieAuth': 'JSESSIONID'}
+)
+
+    The following cookie will be added to the HTTP request:
+       Cookie: JSESSIONID abc123
     """
 
     _default = None
 
-    def __init__(self, host="http://localhost:3000",
+    def __init__(self, host="https://versioningservice.azurewebsites.net",
                  api_key=None, api_key_prefix=None,
                  username=None, password=None,
                  discard_unknown_keys=False,
@@ -319,10 +338,18 @@ class Configuration(object):
         :return: The Auth Settings information dict.
         """
         auth = {}
+        if 'Authorization' in self.api_key:
+            auth['ApiKey'] = {
+                'type': 'api_key',
+                'in': 'header',
+                'key': 'Authorization',
+                'value': self.get_api_key_with_prefix('Authorization')
+            }
         if self.access_token is not None:
             auth['JWT'] = {
                 'type': 'bearer',
                 'in': 'header',
+                'format': 'Bearer <token>',
                 'key': 'Authorization',
                 'value': 'Bearer ' + self.access_token
             }
@@ -347,7 +374,7 @@ class Configuration(object):
         """
         return [
             {
-                'url': "http://localhost:3000",
+                'url': "https://versioningservice.azurewebsites.net",
                 'description': "No description provided",
             }
         ]

@@ -1,9 +1,9 @@
 # coding: utf-8
 
 """
-    Data Catalog Versioning API
+    Data Catalog Versioning Service API
 
-    This API is used to communicate with the versioning service of the Data Catalog application.  # noqa: E501
+    The asset versioning service of the Data Catalog application.  Provides API endpoints to create, delete and retrieve asset versions. The access rights to an asset's version are the same as the right to the asset itself.  The versions cannot be modified, only deleted.  # noqa: E501
 
     The version of the OpenAPI document: 1.0
     Contact: szilardtumo@stud.ubbcluj.ro

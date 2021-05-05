@@ -1,10 +1,9 @@
-from data_catalog.assets import AssetService
-from data_catalog.client.asset import Configuration, ApiClient, Location, Parameter, AssetCreationRequest
-import data_catalog.assets as assets
+from data_catalog import DataCatalog
 
+api_key = 'LmHQ28ZzCUiMmKZ/vJE2ub+fzbO4JZ+HQdz6byAfyGQthG6mcRjsX9UNZq9GODdkJm/Tvib4/ONHzYo2AlI1QA=='
+with DataCatalog(api_key=api_key) as asset_service:
+    assets = asset_service.list_assets()
+    print(len(assets))
 
-with AssetService(username="dzsotti99", password="kecske") as asset_service:
-    location = Location(type="url", parameters=[Parameter(key="url", value="http://ssss.com")])
-    asset_request = AssetCreationRequest(name="frompython", description="asd", format="csv", location=location, tags=[])
-    asset_service.asset_api.create_asset(asset_creation_request=asset_request)
+    asset_service.get_asset('asdasd')
 

@@ -9,4 +9,3 @@ PyYAML~=5.3.1
 -r requirements-test.txt
 
 pillow~=8.0.1
-configloader~=1.0.1

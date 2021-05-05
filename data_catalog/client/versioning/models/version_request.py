@@ -1,9 +1,9 @@
 # coding: utf-8
 
 """
-    Data Catalog Versioning API
+    Data Catalog Versioning Service API
 
-    This API is used to communicate with the versioning service of the Data Catalog application.  # noqa: E501
+    The asset versioning service of the Data Catalog application.  Provides API endpoints to create, delete and retrieve asset versions. The access rights to an asset's version are the same as the right to the asset itself.  The versions cannot be modified, only deleted.  # noqa: E501
 
     The version of the OpenAPI document: 1.0
     Contact: szilardtumo@stud.ubbcluj.ro
@@ -56,7 +56,7 @@ class VersionRequest(object):
     def name(self):
         """Gets the name of this VersionRequest.  # noqa: E501
 
-        The name (or tag) of the version.  # noqa: E501
+        The name of the version.  # noqa: E501
 
         :return: The name of this VersionRequest.  # noqa: E501
         :rtype: str
@@ -67,7 +67,7 @@ class VersionRequest(object):
     def name(self, name):
         """Sets the name of this VersionRequest.
 
-        The name (or tag) of the version.  # noqa: E501
+        The name of the version.  # noqa: E501
 
         :param name: The name of this VersionRequest.  # noqa: E501
         :type: str

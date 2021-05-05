@@ -1,9 +1,9 @@
 # coding: utf-8
 
 """
-    Data Catalog Asset Service API
+    Data Catalog User Service API
 
-    The asset handling service of the Data Catalog application.  Provides API endpoints to create, delete, and modify assets. It also manages the access rights to the assets, as private assets are only available to users that are members of it.  # noqa: E501
+    The user handling service of the Data Catalog application.  Provides API endpoints to register, and log in to the application.  It communicates with other services to tell informations about tokens, thus authorizing a request made at another service. Provides endpoints to delete, and list users for administrative purposes.  The api supports JWT token, and API key authentication.  # noqa: E501
 
     The version of the OpenAPI document: 1.0
     Contact: szilard.tumo@stud.ubbcluj.ro
@@ -16,7 +16,7 @@ import re  # noqa: F401
 
 import six
 
-from data_catalog.client.asset.configuration import Configuration
+from data_catalog.client.user.configuration import Configuration
 
 
 class ErrorResponse(object):

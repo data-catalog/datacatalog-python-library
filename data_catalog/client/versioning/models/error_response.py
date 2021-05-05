@@ -1,9 +1,9 @@
 # coding: utf-8
 
 """
-    Data Catalog Versioning API
+    Data Catalog Versioning Service API
 
-    This API is used to communicate with the versioning service of the Data Catalog application.  # noqa: E501
+    The asset versioning service of the Data Catalog application.  Provides API endpoints to create, delete and retrieve asset versions. The access rights to an asset's version are the same as the right to the asset itself.  The versions cannot be modified, only deleted.  # noqa: E501
 
     The version of the OpenAPI document: 1.0
     Contact: szilardtumo@stud.ubbcluj.ro
@@ -37,7 +37,7 @@ class ErrorResponse(object):
         'timestamp': 'datetime',
         'status': 'int',
         'error': 'str',
-        'message': 'str',
+        'message': 'object',
         'path': 'str'
     }
 
@@ -76,7 +76,7 @@ class ErrorResponse(object):
     def timestamp(self):
         """Gets the timestamp of this ErrorResponse.  # noqa: E501
 
-        The time of the error response being sent.  # noqa: E501
+        The time of the error.  # noqa: E501
 
         :return: The timestamp of this ErrorResponse.  # noqa: E501
         :rtype: datetime
@@ -87,7 +87,7 @@ class ErrorResponse(object):
     def timestamp(self, timestamp):
         """Sets the timestamp of this ErrorResponse.
 
-        The time of the error response being sent.  # noqa: E501
+        The time of the error.  # noqa: E501
 
         :param timestamp: The timestamp of this ErrorResponse.  # noqa: E501
         :type: datetime
@@ -117,12 +117,6 @@ class ErrorResponse(object):
         """
         if self.local_vars_configuration.client_side_validation and status is None:  # noqa: E501
             raise ValueError("Invalid value for `status`, must not be `None`")  # noqa: E501
-        if (self.local_vars_configuration.client_side_validation and
-                status is not None and status > 599):  # noqa: E501
-            raise ValueError("Invalid value for `status`, must be a value less than or equal to `599`")  # noqa: E501
-        if (self.local_vars_configuration.client_side_validation and
-                status is not None and status < 100):  # noqa: E501
-            raise ValueError("Invalid value for `status`, must be a value greater than or equal to `100`")  # noqa: E501
 
         self._status = status
 
@@ -153,10 +147,10 @@ class ErrorResponse(object):
     def message(self):
         """Gets the message of this ErrorResponse.  # noqa: E501
 
-        A description of the error.  # noqa: E501
+        An object containing the erros, with the field name as key, and the error cause as value.  # noqa: E501
 
         :return: The message of this ErrorResponse.  # noqa: E501
-        :rtype: str
+        :rtype: object
         """
         return self._message
 
@@ -164,10 +158,10 @@ class ErrorResponse(object):
     def message(self, message):
         """Sets the message of this ErrorResponse.
 
-        A description of the error.  # noqa: E501
+        An object containing the erros, with the field name as key, and the error cause as value.  # noqa: E501
 
         :param message: The message of this ErrorResponse.  # noqa: E501
-        :type: str
+        :type: object
         """
 
         self._message = message
