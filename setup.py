@@ -14,7 +14,7 @@
 from setuptools import setup, find_packages  # noqa: H301
 
 NAME = "data_catalog"
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 # To install the library, run the following
 #
 # python setup.py install
@@ -22,7 +22,15 @@ VERSION = "1.0.0"
 # prerequisite: setuptools
 # http://pypi.python.org/pypi/setuptools
 
-REQUIRES = ["urllib3 >= 1.15", "six >= 1.10", "certifi", "python-dateutil"]
+REQUIRES = [
+    "pandas~=1.1.3",
+    "six~=1.15.0",
+    "certifi~=2020.6.20",
+    "urllib3~=1.25.11",
+    "python-dateutil~=2.8.1",
+    "azure-storage-blob~=12.6.0",
+    "PyYAML~=5.3.1"
+]
 
 setup(
     name=NAME,
