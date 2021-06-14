@@ -65,17 +65,20 @@ class Asset(AssetResponse):
         if asset_response.location is not None:
             asset_response.location = Location(asset_response.location.type, asset_response.location.parameters)
 
+        asset_response.version_service = VersionService()
+
         return asset_response
 
     # TODO: get data from a certain version
-    def get_data(self, version_name: str = None) -> pd.DataFrame:
+    def get_data(self, version_name: str = None, merge: bool = False) -> pd.DataFrame:
         """
         Obtains data from its location and returns it in Pandas Data Frame.
         Version is only supported when the location type is azureblob.
         :param str version_name: the name of the version to download. If none, the latest version will be downloaded.
-        :return: if location type is 'url', then Pandas Data Frame,
-                 if it  is 'azureblob', then ContainerClient
-        :rtype: Union[pd.DataFrame, ContainerClient]
+        :param bool merge: Return all the data in a single DataFrame
+        :return: if merge is True, return a pandas DataFrame containing all the data,
+                 if merge is False, return a list of DataFrames containing the data from the different files
+        :rtype: Union[pd.DataFrame, List[pd.DataFrame]]
         """
 
         if self.location is None:
@@ -85,7 +88,7 @@ class Asset(AssetResponse):
         if self.location.type == 'url':
             return self._get_data_from_url()
         elif self.location.type == 'azureblob':
-            return self._get_data_from_container(version_name=version_name)
+            return self._get_data_from_container(version_name=version_name, merge=merge)
         else:
             raise NotImplementedError
 
@@ -118,11 +121,13 @@ class Asset(AssetResponse):
 
         return data_frame
 
-    def _get_data_from_container(self, version_name: str = None) -> pd.DataFrame:
+    def _get_data_from_container(self, version_name: str = None, merge: bool = False) \
+            -> Union[pd.DataFrame, List[pd.DataFrame]]:
         """
         Obtains data when the location type is azureblob (data from Azure Blob Storage)
-        :return: pandas dataframe
-        :rtype: pd.DataFrame
+        :return: list of pandas dataframes containing the data,
+                 or a single dataframe which contains the data from all files if merge is True
+        :rtype: Union[pd.DataFrame, List[pd.DataFrame]]
         """
         container = self._get_container()
         if version_name is None:
@@ -133,20 +138,20 @@ class Asset(AssetResponse):
 
             for content in version.contents:
                 try:
-                    blob = container.get_blob_client(content.name)
-                    if blob.get_blob_properties().last_modified > content.last_modified:
+                    blob_properties = container.get_blob_client(content.name).get_blob_properties()
+                    if blob_properties.last_modified > content.last_modified:
                         raise FileNotFoundError
                 except (ResourceNotFoundError, FileNotFoundError):
                     raise FileNotFoundError('The blob %s was not found, or it was modified.' % content.name)
 
-                blob_list.append(blob)
+                blob_list.append(blob_properties)
 
         data_frames = []
         try:
             if self.format == 'csv':
-                for blob in blob_list:
+                for blob_properties in blob_list:
                     stream = BytesIO()
-                    container.download_blob(blob).readinto(stream)
+                    container.download_blob(blob_properties).readinto(stream)
 
                     stream.seek(0)
                     delimiter = Sniffer().sniff(stream.read().decode()).delimiter
@@ -154,9 +159,9 @@ class Asset(AssetResponse):
                     stream.seek(0)
                     data_frames.append(pd.read_csv(stream, sep=delimiter))
             elif self.format == 'json':
-                for blob in blob_list:
+                for blob_properties in blob_list:
                     stream = BytesIO()
-                    container.download_blob(blob).readinto(stream)
+                    container.download_blob(blob_properties).readinto(stream)
 
                     stream.seek(0)
                     data_frames.append(pd.read_json(stream))
@@ -165,7 +170,7 @@ class Asset(AssetResponse):
         except pd.errors.ParserError:
             raise ValueError('Could not parse the data from the blob container')
 
-        return pd.concat(data_frames, ignore_index=True)
+        return pd.concat(data_frames, ignore_index=True) if merge else data_frames
 
     def _get_container(self) -> ContainerClient:
         """

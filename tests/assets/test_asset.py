@@ -125,7 +125,7 @@ def test_get_data_from_container_when_empty(mocker, blob_asset):
     )
 
     with pytest.raises(ValueError):
-        blob_asset.get_data()
+        blob_asset.get_data(merge=True)
 
 
 def test_get_data(mocker, json_asset):

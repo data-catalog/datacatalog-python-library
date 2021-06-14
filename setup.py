@@ -33,7 +33,7 @@ setup(
     url="",
     keywords=["OpenAPI", "OpenAPI-Generator", "Data Catalog"],
     install_requires=REQUIRES,
-    packages=find_packages(exclude=["test", "tests"]),
+    packages=find_packages(exclude=["tests"]),
     include_package_data=True,
     long_description="Data Catalog Python Client"
 )
